@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>맨 인 블랙 · 수상한 지구 생활</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Orbitron:wght@600;800&family=Nunito:wght@700;800;900&display=swap">
+<style>
+:root{
+  --bg:#060b18;--bg2:#0b1430;--panel:#0f1b3a;--panel2:#132449;--line:#2a4a86;--glow:#38e1ff;--glow2:#7cf5c8;
+  --gold:#ffc83d;--gold2:#ff9f1c;--ink:#e9f2ff;--mute:#8ea7d4;--red:#ff5d6c;--green:#47e08f;--paper:#fdf7e6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Gowun Dodum','Nunito',sans-serif;font-size:16px}
+body{min-height:100vh;background:radial-gradient(1200px 600px at 50% -10%,#16306b 0%,transparent 60%),radial-gradient(800px 500px at 100% 100%,#0c3b4f 0%,transparent 60%),var(--bg)}
+#bg{position:fixed;inset:0;z-index:0;background:center/cover no-repeat;opacity:0;transition:opacity .8s,background-image .3s}
+#bgShade{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(4,8,20,.25),rgba(4,8,20,.72))}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(56,225,255,.035) 0 1px,transparent 1px 4px);z-index:0}
+button{font-family:inherit;cursor:pointer}
+.en{font-family:'Nunito',sans-serif;font-weight:800}
+.hidden{display:none!important}
+.screen{position:relative;z-index:1;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.btn{border:0;border-radius:12px;padding:12px 20px;font-weight:800;font-size:16px;color:#bfefff;background:#0a1532 url('img/btn-b.png') center/100% 100% no-repeat;box-shadow:0 0 14px rgba(56,225,255,.25);text-shadow:0 1px 4px rgba(0,0,0,.8);transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #157a96}
+.btn.gold{background:linear-gradient(180deg,#ffe07a,#ffb21c);box-shadow:0 4px 0 #b5700b,0 0 18px rgba(255,190,40,.35)}
+.btn.dark{background:#16264d;color:var(--ink);box-shadow:0 3px 0 #0c1733;border:1px solid var(--line)}
+.btn.red{background:#0a1532 url('img/btn-re.png') center/100% 100% no-repeat;color:#ffd9a8;box-shadow:none}
+.btn.green{background:#0a1532 url('img/btn-ok.png') center/100% 100% no-repeat;color:#9dffc8;box-shadow:none}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:10px;background-image:none;color:#061024;background:linear-gradient(180deg,#8ff0ff,#2cc4e8);box-shadow:0 3px 0 #157a96;text-shadow:none}
+.btn.green.sm{background:linear-gradient(180deg,#9dffc8,#2fd47e);box-shadow:0 3px 0 #17864b}
+.btn.red.sm{background:linear-gradient(180deg,#ff9aa4,#ff4f62);box-shadow:0 3px 0 #a32033}
+.btn.dark.sm{background:#16264d;color:var(--ink);box-shadow:0 3px 0 #0c1733}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.panel{border:22px solid transparent;border-image:url('img/frame-a.png') 56 fill stretch;border-radius:0;padding:2px 4px;box-shadow:0 10px 30px rgba(0,0,0,.4);background:none}
+.ptitle{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 10px;font-family:'Black Han Sans';font-weight:400;font-size:18px;color:#dff3ff;letter-spacing:.5px;background:url('img/tb-navy.png') center/100% 100% no-repeat;padding:12px 18px;text-shadow:0 1px 4px #000}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:#1b2d57;border:1px solid var(--line);font-size:13px;color:var(--mute)}
+input,select{font-family:inherit;font-size:18px;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:#0a1532;color:var(--ink);outline:none;width:100%}
+input:focus{border-color:var(--glow)}
+.spk{border:0;background:#1d3a74;color:#bfefff;border-radius:999px;width:38px;height:38px;font-size:18px;flex:none}
+.spk:active{transform:scale(.94)}
+
+/* ---- 로고 ---- */
+.logo{text-align:center;margin:26px 0 8px}
+.logo .logoimg{width:min(480px,82vw);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
+.humanimg{filter:drop-shadow(0 4px 10px rgba(0,0,0,.45))}
+.gate-agents{position:absolute;bottom:0;width:17%;pointer-events:none;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
+@media(max-width:760px){.gate-agents{display:none}}
+.stampimg{width:min(300px,62vw);filter:drop-shadow(0 6px 20px rgba(0,0,0,.6));animation:pop .4s cubic-bezier(.3,1.8,.5,1)}
+.logo .en2{font-family:'Orbitron';letter-spacing:6px;color:var(--mute);font-size:12px;margin-top:8px}
+
+/* ---- 입장 ---- */
+.gatewrap{max-width:620px;margin:6px auto 20px}
+.gate{position:relative;width:100%;aspect-ratio:1672/941;background:url('img/panel-code2.png') center/100% 100% no-repeat;filter:drop-shadow(0 14px 30px rgba(0,0,0,.5))}
+.gate input{position:absolute;background:transparent;border:0;outline:none;color:#aefcff;font-family:'Orbitron','Nunito',sans-serif;font-weight:800;text-align:center}
+.gate input::placeholder{color:#3d6ea8;font-family:'Gowun Dodum';font-weight:400;letter-spacing:0}
+.gate .gcode{left:36%;top:16.5%;width:35%;height:12%;font-size:clamp(16px,3.4vw,26px);letter-spacing:.35em}
+.gate .gname{left:22%;top:40%;width:56%;height:15%;font-size:clamp(16px,3vw,24px);border-bottom:2px solid rgba(56,225,255,.35)}
+.gate .glabel{position:absolute;left:0;width:100%;text-align:center;color:var(--mute);font-size:clamp(11px,1.8vw,14px);pointer-events:none}
+.gate .gl1{top:57.5%}
+.gate .gbtn{position:absolute;left:29.5%;top:72.5%;width:41%;height:13.5%;border:0;background:rgba(56,225,255,.06);border-radius:999px;color:#ffe9a8;font-family:'Black Han Sans';font-size:clamp(16px,3vw,24px);letter-spacing:4px;cursor:pointer;text-shadow:0 0 12px rgba(255,200,61,.6)}
+.gate .gbtn:hover{background:rgba(56,225,255,.16)}
+.gate .gbtn:active{transform:translateY(2px)}
+.joinsub{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px;flex-wrap:wrap}
+.pracbox{max-width:620px;margin:0 auto}
+.pracbox .row2{display:flex;gap:10px;flex-wrap:wrap}
+.pracbox .row2>*{flex:1;min-width:150px}
+.join label{display:block;color:var(--mute);margin:10px 0 6px;font-size:14px}
+.agents{display:flex;justify-content:center;gap:6px;margin:6px 0 0;opacity:.95;align-items:flex-end}
+.msg{color:var(--red);min-height:22px;margin-top:8px;text-align:center;text-shadow:0 1px 4px #000}
+
+/* ---- 요원증 ---- */
+.idcard{position:relative;width:100%;aspect-ratio:1672/941;background:url('img/panel-idcard.png') center/100% 100% no-repeat;filter:drop-shadow(0 14px 30px rgba(0,0,0,.5))}
+.idcard .ihead{position:absolute;left:14%;top:8.5%;width:76%;height:14%;display:flex;align-items:center;font-family:'Black Han Sans';font-size:clamp(15px,3.2vw,24px);color:#cfe9ff;letter-spacing:1px}
+.idcard .iphoto{position:absolute;left:7%;top:31%;width:25.5%;height:50%;display:grid;place-items:center;overflow:hidden}
+.idcard .iphoto svg{height:96%;width:auto}
+.idcard .iphoto img{width:88%!important;height:90%;object-fit:cover;object-position:top;border-radius:8px}
+.idcard .irow{position:absolute;left:37%;width:56%;display:flex;align-items:center;padding:0 3%;font-family:'Nunito';font-weight:800}
+.idcard .ir1{top:32.5%;height:21%;font-size:clamp(17px,3.6vw,28px);color:#fff}
+.idcard .ir2{top:60%;height:21%;font-size:clamp(13px,2.6vw,19px);color:var(--mute)}
+/* ---- 상단 바 ---- */
+.hud{position:sticky;top:0;z-index:20;background:rgba(6,11,24,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.hud .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px}
+.hud .team{font-family:'Black Han Sans';font-size:20px;color:var(--glow)}
+.hud .case{font-weight:800}
+.parts{display:flex;gap:4px}
+.parts i{width:16px;height:16px;border-radius:4px;border:1px solid var(--line);background:#0a1532}
+.parts i.on{background:linear-gradient(180deg,#ffe07a,#ffb21c);box-shadow:0 0 8px rgba(255,190,40,.6)}
+.score{margin-left:auto;font-family:'Orbitron';color:var(--gold);font-size:18px}
+.mem{display:flex;gap:6px;flex-wrap:wrap}
+.mem span{font-size:13px;padding:3px 8px;border-radius:999px;background:#13244a;border:1px solid var(--line)}
+.mem span.me{border-color:var(--glow);color:var(--glow)}
+.mem span.off{opacity:.45}
+
+/* ---- 브리핑 ---- */
+.brief{max-width:820px;margin:18px auto}
+.brief .place{display:flex;gap:16px;align-items:center}
+.brief .ico{font-size:58px;width:92px;height:92px;display:grid;place-items:center;border-radius:20px;background:#0a1532;border:2px solid var(--line);box-shadow:0 0 18px rgba(56,225,255,.25) inset}
+.brief h2{font-family:'Black Han Sans';font-weight:400;font-size:30px;margin:4px 0}
+.brief .chap{color:var(--gold);font-weight:800}
+.brief .row{margin:12px 0;padding:12px 14px;border-radius:12px;background:#0a1532;border-left:4px solid var(--glow)}
+.brief .row b{color:var(--glow2)}
+.prolog{background:linear-gradient(90deg,rgba(255,200,61,.12),transparent);border:1px solid rgba(255,200,61,.4);border-radius:14px;padding:12px 14px;margin-bottom:12px;line-height:1.6}
+.readyrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.readyrow span{padding:6px 10px;border-radius:10px;background:#13244a;font-size:14px}
+.readyrow span.ok{background:#124d39;color:#9dffc8}
+
+/* ---- 수사 화면 ---- */
+.inv{display:grid;grid-template-columns:330px 1fr;gap:14px;align-items:start;padding-bottom:96px}
+@media(max-width:900px){.inv{grid-template-columns:1fr}}
+.secret{border:20px solid transparent;border-image:url('img/frame-a.png') 56 fill stretch;color:var(--ink);padding:4px 6px 8px;position:relative}
+.secret::before{content:"TOP SECRET";position:absolute;right:2px;top:-6px;font-family:'Orbitron';font-size:10px;color:#ffc83d;letter-spacing:2px}
+.secret .stitle{font-family:'Black Han Sans';font-size:17px;color:#2a1c00;background:linear-gradient(180deg,#ffe07a,#ffb21c);border-radius:999px;padding:6px 14px;margin:0 0 10px;box-shadow:0 0 12px rgba(255,190,40,.35)}
+.secret .txt{font-family:'Nunito';font-weight:900;font-size:20px;line-height:1.35;margin:4% 0;color:#eaf4ff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.secret .hint{background:rgba(56,225,255,.12);border:1px solid rgba(56,225,255,.4);border-radius:8px;padding:6px 10px;font-size:14px;color:#bfefff}
+.secret .foot{font-size:12px;color:var(--mute);margin-top:8px}
+.secret .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.clue{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0;background:#0a1532}
+.clue .who{font-size:12px;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
+.clue .t{font-family:'Nunito';font-weight:800;font-size:17px;margin-top:4px;line-height:1.35}
+.clue.pending{border-color:var(--gold);box-shadow:0 0 12px rgba(255,200,61,.25)}
+.clue.locked .t{color:#5d76a8;font-family:'Gowun Dodum';font-weight:400;font-size:14px}
+.clue.decoded{border-color:#2b7a5a}
+.opts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.opts button{border:2px solid var(--gold);background:#1a2340;color:#ffe9a8;border-radius:10px;padding:7px 12px;font-family:'Nunito';font-weight:800;font-size:15px}
+.opts button.bad{border-color:var(--red);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.feed{font-size:13px;color:var(--mute);line-height:1.6;max-height:150px;overflow:auto}
+.feed div::before{content:"▸ ";color:var(--glow)}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1;border:1px solid var(--line);background:#0a1532;color:var(--mute);border-radius:12px;padding:10px;font-weight:800;font-size:15px}
+.tabs button.on{background:#1b3a77;color:#fff;border-color:var(--glow)}
+.cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.cand{position:relative;border-radius:16px;background:linear-gradient(180deg,#1a2f60,#0c1938);border:2px solid var(--line);padding:8px;text-align:center;cursor:pointer;transition:transform .1s}
+.cand:hover{transform:translateY(-2px);border-color:var(--glow)}
+.cand .lt{position:absolute;left:8px;top:8px;width:30px;height:30px;border-radius:9px;background:var(--gold);color:#3b2600;font-family:'Orbitron';font-weight:800;display:grid;place-items:center}
+.cand .humanimg{border-radius:10px;width:78%!important;max-width:150px}
+.cand .nm{font-family:'Nunito';font-weight:900;font-size:17px}
+.cand .rl{font-size:12px;color:var(--mute)}
+.cand.marked .human{opacity:.35;filter:grayscale(1)}
+.cand.marked::after{content:"✕";position:absolute;inset:0;display:grid;place-items:center;font-size:110px;color:rgba(255,93,108,.55);pointer-events:none;font-family:'Nunito'}
+.cand.cleared::after{content:"HUMAN";font-size:30px;font-family:'Orbitron';color:#47e08f;transform:rotate(-14deg);text-shadow:0 0 10px #000}
+.cand .qcount{position:absolute;right:8px;top:8px;font-size:12px;background:#0a1532;border-radius:8px;padding:2px 6px}
+.cmp{overflow:auto;border-radius:12px;border:1px solid var(--line)}
+.cmp table{border-collapse:collapse;width:100%;min-width:560px;font-family:'Nunito';font-weight:700;font-size:14px}
+.cmp th,.cmp td{border-bottom:1px solid #1d3466;padding:8px;text-align:center}
+.cmp th{background:#13244a;position:sticky;top:0}
+.cmp td:first-child,.cmp th:first-child{text-align:left;color:var(--glow2);background:#0d1a3a;position:sticky;left:0;max-width:170px}
+.cmp td.q{color:#5d76a8;cursor:pointer}
+.cmp td.q:hover{color:var(--gold)}
+.cmp tr.cl td{opacity:.35}
+.cmp .ava{display:flex;flex-direction:column;align-items:center}
+.cmp .ava img{border-radius:6px}
+.mhead .humanimg,.votebar .humanimg{border-radius:10px}
+.cmp .x{color:var(--red)}
+.actbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(6,11,24,.94);border-top:1px solid var(--line);backdrop-filter:blur(6px)}
+.actbar .wrap{display:flex;gap:10px;align-items:center;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.timer{font-family:'Orbitron';color:var(--mute)}
+.actbar .grow{flex:1}
+
+/* ---- 모달 ---- */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(2,6,16,.78);display:flex;align-items:flex-start;justify-content:center;padding:20px 12px;overflow:auto}
+.modal .box{width:min(760px,100%);margin:auto}
+.mhead{display:flex;align-items:center;gap:12px}
+.mhead .x{margin-left:auto}
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:600px){.docs{grid-template-columns:1fr}}
+.doc{border-radius:12px;padding:10px 12px;font-family:'Nunito';font-weight:700;font-size:15px}
+.doc h4{margin:0 0 6px;font-size:12px;letter-spacing:1.5px;font-family:'Orbitron'}
+.doc .f{color:#6b7a99;font-size:12px}
+.doc.id{background:#e7f1ff;color:#16264a;border:2px solid #7fa7e8}
+.doc.record{background:#e9fff3;color:#123a26;border:2px solid #6fcf97}
+.doc.schedule{background:#fff;color:#222;border:2px solid #f08c00}
+.doc.receipt{background:#fffdf5;color:#333;border:2px dashed #999;font-family:'Courier New',monospace}
+.doc.note{background:#fff3a6;color:#3d3300;border:0;box-shadow:2px 3px 0 #d6c25a}
+.doc.photo{background:#10203f;color:#cfe4ff;border:1px solid var(--line)}
+.doc .line{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dotted rgba(0,0,0,.15)}
+.doc .line:last-child{border:0}
+.chat{margin-top:12px}
+.bub{display:flex;gap:8px;align-items:flex-start;margin:6px 0}
+.bub div{padding:8px 12px;border-radius:14px;font-family:'Nunito';font-weight:800;max-width:85%}
+.bub.q div{background:#1b3a77}
+.bub.a{justify-content:flex-end}
+.bub.a div{background:#fdf7e6;color:#222}
+.qlist{display:grid;gap:8px;margin-top:8px}
+.qlist button{text-align:left;border:1px solid var(--line);background:#0a1532;color:var(--ink);border-radius:12px;padding:10px 12px;font-family:'Nunito';font-weight:800;font-size:16px}
+.qlist button:hover{border-color:var(--gold)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.pick .cand{padding:6px}
+.pick .cand.sel{border-color:var(--gold);box-shadow:0 0 16px rgba(255,200,61,.6)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:#0a1532;border:1px solid var(--line);margin:6px 0;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;margin-top:2px}
+.chk span{font-family:'Nunito';font-weight:800}
+.votebar{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;z-index:40;width:min(640px,94%);border:2px solid var(--gold);box-shadow:0 0 30px rgba(255,200,61,.35)}
+.votebar .vico{width:40px;height:40px;flex:none}
+.brief .ico{background:#0a1532 url('img/card-d.png') center/100% 100% no-repeat;border:0}
+.done .medal{width:150px;filter:drop-shadow(0 6px 18px rgba(255,200,61,.45))}
+.done .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.done .chips .chip1{width:56px;text-align:center;font-size:11px;color:var(--mute)}
+.done .chips img{width:52px}
+
+/* ---- 스캔 연출 ---- */
+.scan{position:fixed;inset:0;z-index:80;background:radial-gradient(circle at 50% 50%,#0b2a4a,#02060f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.tube{position:relative;width:260px;height:340px;border-radius:130px 130px 24px 24px;border:3px solid rgba(56,225,255,.7);background:linear-gradient(180deg,rgba(56,225,255,.08),rgba(56,225,255,.22));box-shadow:0 0 40px rgba(56,225,255,.5),inset 0 0 40px rgba(56,225,255,.3);display:grid;place-items:center;overflow:hidden}
+.tube::after{content:"";position:absolute;left:0;right:0;height:16px;background:linear-gradient(180deg,transparent,#8ff0ff,transparent);animation:sweep 1.1s linear infinite}
+@keyframes sweep{from{top:-20px}to{top:100%}}
+.tube .h{position:absolute;transition:opacity .8s,filter .8s}
+.tube .h.fade{opacity:0;filter:blur(8px) hue-rotate(90deg)}
+.tube .al{opacity:0;transform:scale(.6);transition:all .7s cubic-bezier(.3,1.6,.5,1)}
+.tube .al.on{opacity:1;transform:scale(1)}
+.scan .st{font-family:'Orbitron';letter-spacing:4px;color:var(--glow);font-size:18px}
+.stamp{font-family:'Orbitron';font-size:42px;padding:8px 22px;border:5px solid;border-radius:12px;transform:rotate(-8deg);animation:pop .4s cubic-bezier(.3,1.8,.5,1)}
+.stamp.h{color:var(--green);border-color:var(--green)}
+.stamp.a{color:var(--gold);border-color:var(--gold)}
+@keyframes pop{from{transform:scale(2.2) rotate(-8deg);opacity:0}}
+
+/* ---- 정체 공개 ---- */
+.reveal{max-width:900px;margin:18px auto;display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:center}
+@media(max-width:760px){.reveal{grid-template-columns:1fr;text-align:center}}
+.reveal .tube{margin:auto;height:320px}
+.reveal h2{font-family:'Black Han Sans';font-weight:400;font-size:38px;margin:0;color:var(--gold)}
+.reveal .gag{font-size:18px;margin:8px 0}
+.say{display:flex;gap:10px;align-items:center;background:#fdf7e6;color:#222;border-radius:16px;padding:12px 14px;margin:12px 0;text-align:left}
+.say .en{font-size:19px}
+.say .ko{font-size:14px;color:#6b5a2e}
+
+/* ---- 보고서 ---- */
+.report{max-width:760px;margin:18px auto;background:var(--paper);color:#2a2112;border-radius:16px;padding:18px;box-shadow:0 8px 0 #b09b5f}
+.rline{padding:10px;border-radius:12px;margin:8px 0;background:#fff;border:2px solid #e8dbb0}
+.rline .s{font-family:'Nunito';font-weight:900;font-size:18px}
+.rline.mine{border-color:#2cc4e8;background:#effcff}
+.rline.done{border-color:#58c98a}
+.rline input{background:#fff;color:#123;border-color:#2cc4e8;margin-top:8px}
+.rline .who{font-size:12px;color:#8a7a4a}
+
+/* ---- 작전 완료 ---- */
+.done{max-width:820px;margin:18px auto;text-align:center}
+.trans{font-size:80px;filter:drop-shadow(0 0 20px rgba(255,200,61,.7));animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rt{width:100%;border-collapse:collapse;margin-top:12px;text-align:left}
+.rt td,.rt th{padding:8px;border-bottom:1px solid var(--line)}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:90;background:url('img/panel-banner.png') center/100% 100% no-repeat;border:0;padding:10px 30px 10px 92px;border-radius:12px;font-weight:800;min-width:300px;max-width:92vw;min-height:66px;display:flex;align-items:center;font-size:15px;text-shadow:0 1px 4px #000}
+.toast.hidden{display:none}
+
+img.alienimg{image-rendering:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+.cand{background:url('img/card-d.png') center/100% 100% no-repeat;border:2px solid transparent;padding:16px 10px 18px}
+.cand:hover{border-color:transparent;filter:brightness(1.12)}
+.cand.cleared{background-image:url('img/card-c.png')}
+.cand .lt{background:linear-gradient(180deg,#ffe07a,#ffb21c);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.parts i.on{background:url('img/chip-ok.png') center/cover;border:0;box-shadow:0 0 8px rgba(56,225,255,.5)}
+.report{background:#fdf7e6 url('img/bg-paper.jpg') center/cover;background-blend-mode:soft-light;position:relative}
+.qlist button{background:#0a1532 url('img/qrow-a.png') center/100% 100% no-repeat}
+.qlist button:hover{background-image:url('img/qrow-b.png')}
+#cdOv{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(2,6,16,.45);pointer-events:none}
+#cdOv img{width:min(38vw,240px);animation:cdpop .62s cubic-bezier(.2,1.6,.4,1)}
+@keyframes cdpop{from{transform:scale(2.4);opacity:0}}
+.scan{background:radial-gradient(circle at 50% 42%,rgba(10,42,74,.6),rgba(2,6,15,.92) 72%),url('img/bg-scan.jpg') center/cover no-repeat}
+.scan .fx{position:absolute;width:420px;max-width:80vw;pointer-events:none;animation:fxspin 3s linear infinite;opacity:.9}
+@keyframes fxspin{to{transform:rotate(360deg)}}
+.reveal .tube{position:relative}
+.reveal-burst{position:absolute;inset:-40px;background:url('img/fx-burst.png') center/contain no-repeat;animation:fxspin 9s linear infinite;pointer-events:none}
+/* 보고서 헤더 카드 */
+.repcard{position:relative;width:100%;max-width:640px;margin:0 auto 14px;aspect-ratio:1200/675;background:url('img/panel-record.png') center/100% 100% no-repeat;color:var(--ink);filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+.repcard .rgold{position:absolute;left:14%;top:14.5%;width:77%;height:12.5%;display:flex;align-items:center;font-family:'Black Han Sans';font-size:clamp(14px,2.4vw,20px);color:#ffe9a8;text-shadow:0 1px 4px #000}
+.repcard .rs1{position:absolute;left:7.5%;top:30.5%;width:41%;height:13.5%;display:flex;align-items:center;justify-content:center;font-size:clamp(11px,1.9vw,15px);color:#cfe9ff;padding:0 2%}
+.repcard .rs2{position:absolute;left:51.5%;top:30.5%;width:41%;height:13.5%;display:flex;align-items:center;justify-content:center;font-size:clamp(11px,1.9vw,15px);color:#cfe9ff}
+.repcard .rbig{position:absolute;left:8%;top:47%;width:84%;height:32%;display:flex;align-items:center;justify-content:center;gap:10px;font-size:clamp(12px,2vw,16px);color:var(--mute);text-align:center}
+.polaroid{position:absolute;right:-14px;top:-26px;width:110px;aspect-ratio:1/1.1;background:url('img/board-polaroid.png') center/100% 100% no-repeat;transform:rotate(7deg);display:grid;place-items:center;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
+.polaroid img{width:62%;margin-top:-10%}
+.polaroid::after{content:"";position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:30px;height:30px;background:url('img/board-pin.png') center/contain no-repeat}
+/* 활동 도장 */
+.stamps{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.stamps .st1{width:120px;text-align:center}
+.stamps .st1 img{width:84px;transition:filter .3s}
+.stamps .st1.off img{filter:grayscale(1) opacity(.25)}
+.stamps .st1 b{display:block;font-size:14px;color:var(--gold)}
+.stamps .st1.off b{color:#55688f}
+.stamps .st1 span{font-size:11px;color:var(--mute)}
+/* 정체 공개 단상·단서 패널 */
+.pedestal{width:230px;margin:-26px auto 0;display:block}
+.cluebox{background:url('img/frame-teal.png') center/100% 100% no-repeat;padding:9% 8%}
+.tbteal{background:url('img/tb-teal.png') center/100% 100% no-repeat;font-family:'Black Han Sans';color:#063a42;padding:10px 20px;display:inline-block;font-size:17px}
+/* 역할 배지·아이콘 */
+.rbadge{width:17px;height:17px;vertical-align:-3px;margin-right:3px}
+.ticon{width:24px;height:24px}
+.props{display:flex;gap:14px;align-items:center;justify-content:center;margin:10px 0 2px}
+.props img{height:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))}
+.props span{font-size:12px;color:var(--mute)}
+.cand.cleared::after{content:"";background:url('img/stamp-human.png') center/contain no-repeat;transform:rotate(-12deg);font-size:0}
+#cdOv{background:rgba(2,6,16,.55)}
+#cdOv::before{content:"";position:absolute;inset:0;background:url('img/bg-door.jpg') center/cover no-repeat;opacity:.35;z-index:-1}
+.qlist button:nth-child(even){background-image:url('img/qrow-c.png')}
+.qlist button:nth-child(even):hover{background-image:url('img/qrow-b.png')}
+.mhead .pframe{width:96px;height:112px;background:url('img/card-b.png') center/100% 100% no-repeat;display:grid;place-items:center;flex:none}
+.mhead .pframe img{width:72%!important;border-radius:8px}
+.commrow{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px;color:var(--mute);font-size:14px}
+.commrow img.dev{width:84px}
+.commrow img.s{width:26px}
+.secret .hint{background:url('img/panel-hint.png') center/100% 100% no-repeat;border:0;padding:12px 16px}
+/* 외계인 움직임 */
+.a-jiggle{transform-origin:60px 100px;animation:jig 1.2s ease-in-out infinite}
+@keyframes jig{50%{transform:scale(1.06,.93)}}
+.a-eye0{animation:look 2s infinite}.a-eye1{animation:look 2.4s infinite reverse}.a-eye2{animation:look 1.7s infinite}
+@keyframes look{50%{transform:translateX(3px)}}
+.a-tent{animation:wig 1s ease-in-out infinite alternate}
+@keyframes wig{to{transform:translateX(3px)}}
+.a-bob{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.a-hat{animation:hat 2.4s ease-in-out infinite}
+@keyframes hat{50%{transform:translate(4px,-6px) rotate(3deg)}}
+.a-blink{animation:blink .8s infinite alternate}
+@keyframes blink{to{opacity:.2}}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid var(--glow);border-right-color:transparent;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="bgShade"></div>
+
+<!-- 입장 -->
+<section class="screen" id="sJoin">
+  <div class="wrap">
+    <div class="logo">
+      <img class="logoimg" src="img/logo.png" alt="맨 인 블랙 · 수상한 지구 생활">
+      <div class="en2">ALIEN INVESTIGATION HQ · ENGLISH</div>
+    </div>
+    <div class="agents" id="joinArt"></div>
+    <div class="gatewrap">
+      <div class="gate">
+        <img class="gate-agents" src="img/agent-0.png" style="left:-21%">
+        <img class="gate-agents" src="img/agent-1.png" style="right:-21%">
+        <input id="jCode" class="gcode" inputmode="numeric" maxlength="4" placeholder="반 입장 코드 4자리" autocomplete="off">
+        <input id="jName" class="gname" maxlength="12" placeholder="요원 이름" autocomplete="off">
+        <div class="glabel gl1">선생님이 알려 준 코드와 내 이름을 쓰고, 본부 출입문을 여세요.</div>
+        <button class="gbtn" id="jGo">본부 입장</button>
+      </div>
+      <div class="msg" id="jMsg"></div>
+      <div class="joinsub"><button class="btn dark sm" id="pOpen">▶ 혼자 연습 작전 (AI 요원 2명과)</button></div>
+    </div>
+    <div class="pracbox panel hidden" id="pracBox">
+      <h3 class="ptitle">▶ 연습 작전</h3>
+      <div class="row2">
+        <div><label>요원 이름</label><input id="pName" maxlength="12" placeholder="이름"></div>
+        <div><label>연습할 단원</label><select id="pUnit"></select></div>
+      </div>
+      <div style="margin-top:14px"><button class="btn green" style="width:100%" id="pGo">연습 작전 시작</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 대기실 -->
+<section class="screen hidden" id="sWait">
+  <div class="wrap" style="max-width:640px;padding-top:40px">
+    <div class="idcard">
+      <div class="ihead" id="wHead">외계인 조사본부 · 요원증</div>
+      <div class="iphoto" id="wPhoto"></div>
+      <div class="irow ir1" id="wName"></div>
+      <div class="irow ir2" id="wTeam"></div>
+    </div>
+    <p style="text-align:center;margin-top:16px"><span class="spin"></span> <span id="wMsg">선생님이 팀을 배정하고 작전을 시작하면 출동해요.</span></p>
+    <div class="commrow"><img class="dev" src="img/ui-comm.png"><span><img class="s" src="img/ic-sync.png" style="vertical-align:-8px"> 본부 통신 연결됨 · <img class="s" src="img/ic-shield.png" style="vertical-align:-8px"> 보안 채널</span></div>
+  </div>
+</section>
+
+<!-- 게임 -->
+<section class="screen hidden" id="sGame">
+  <div class="hud"><div class="wrap">
+    <span class="team" id="hTeam"></span>
+    <span class="case" id="hCase"></span>
+    <span class="parts" id="hParts" title="번역기 부품"></span>
+    <span class="mem" id="hMem"></span>
+    <span class="score" id="hScore"></span>
+  </div></div>
+  <div class="wrap" id="main"></div>
+  <div class="actbar hidden" id="actbar"><div class="wrap">
+    <span class="timer" id="tTimer">00:00</span>
+    <button class="btn dark sm" id="bHq" title="본부가 아직 전송되지 않은 단서를 대신 보내 줘요 (-10점)">📡 본부 지원</button>
+    <span class="grow"></span>
+    <button class="btn gold" id="bAccuse">🛸 위장 외계인 지목</button>
+  </div></div>
+</section>
+
+<div class="modal hidden" id="modal"><div class="box panel" id="mbox"></div></div>
+<div id="voteBox"></div>
+<div class="scan hidden" id="scan"></div>
+<div class="toast hidden" id="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/art.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const sock = io();
+const LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
+const call = (ev, d) => new Promise(r => sock.emit(ev, d, x => r(x || {})));
+const wimg = (cd, size) => ART.witness(cd.id.charCodeAt(0) - 65, size);
+let V = null, tab = 'cards', modalCand = null, modalMode = null, accuse = { cand: null, basis: [] }, lastScan = null, scanBusy = false, revealSpoken = 0;
+const ROLES = [['role-0', '관찰 요원'], ['role-1', '기록 요원'], ['role-2', '통신 요원'], ['role-3', '연결 요원']];
+const roleImg = i => `<img class="rbadge" src="img/${ROLES[i % 4][0]}.png" title="${ROLES[i % 4][1]}">`;
+const UNIT_T = { 1: 'What Grade Are You In?', 2: 'What Do You Want to Be?', 3: 'When Is the Field Trip?', 4: 'He Has Short Curly Hair', 5: 'How Often Do You Exercise?', 6: "I'm Going to Go on a Trip", 7: 'What Season Do You Like?', 8: "I'm Faster Than You", 9: 'How Can I Get to the Museum?', 10: "I'd Like to Have the Fruit Salad", 11: 'Do You Know About Songpyeon?', 12: 'We Should Save the World' };
+
+/* ---------- 소리 ---------- */
+let AC = null;
+function beep(f = 660, d = .12, type = 'sine', v = .08) { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const o = AC.createOscillator(), g = AC.createGain(); o.type = type; o.frequency.value = f; g.gain.value = v; o.connect(g); g.connect(AC.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + d); o.stop(AC.currentTime + d + .02); } catch (e) {} }
+const sfx = { ok: () => { beep(660); setTimeout(() => beep(990), 90); }, no: () => beep(180, .25, 'square', .05), tick: () => beep(1200, .04, 'square', .03), scan: () => { for (let i = 0; i < 8; i++) setTimeout(() => beep(400 + i * 90, .08, 'sawtooth', .03), i * 160); }, win: () => [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => beep(f, .18, 'triangle', .08), i * 120)) };
+function speak(t, rate) {
+  try { const s = window.speechSynthesis; if (!s) return; s.cancel(); const u = new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g, '')); u.lang = 'en-US'; u.rate = rate || .88;
+    const v = s.getVoices().find(v => /en-US/i.test(v.lang) && /female|samantha|google us/i.test(v.name)) || s.getVoices().find(v => /^en/i.test(v.lang)); if (v) u.voice = v; s.speak(u); } catch (e) {}
+}
+function toast(t, ms) { const el = $('#toast'); el.textContent = t; el.classList.remove('hidden'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add('hidden'), ms || 2200); }
+function show(id) { for (const s of ['sJoin', 'sWait', 'sGame']) $('#' + s).classList.toggle('hidden', s !== id); if (id === 'sJoin') setBg('bg-command', .7); if (id === 'sWait') setBg('bg-comm', .55); }
+const BGOP = { 'bg-alley': .6, 'bg-comm': .55, 'bg-hq': .5, 'bg-desk': .28, 'bg-archive': .3, 'bg-scan': .45, 'bg-paper': .5, 'bg-dawn': .6, 'bg-repair': .5 };
+function setBg(name, op) { const el = $('#bg'); const url = `url('img/${name}.jpg')`; if (el._n !== name) { el._n = name; el.style.backgroundImage = url; } el.style.opacity = op != null ? op : (BGOP[name] || .4); }
+function setH(el, h) { if (el._h !== h) { el._h = h; el.innerHTML = h; } }
+
+/* ---------- 입장 ---------- */
+setBg('bg-command', .7);
+$('#pOpen').onclick = () => { $('#pracBox').classList.toggle('hidden'); };
+$('#joinArt').innerHTML = ['pudding', 'eyes', 'noodle', 'twins', 'pouch', 'saucer'].map(k => ART.alien(k, 74)).join('');
+$('#pUnit').innerHTML = '<option value="all">전체 종합 수사 (1~12단원)</option>' + Object.entries(UNIT_T).map(([u, t]) => `<option value="${u}">${u}단원 · ${t}</option>`).join('');
+$('#jCode').value = LS.get('mib_code') || '';
+$('#jName').value = LS.get('mib_name') || '';
+$('#pName').value = LS.get('mib_name') || '';
+$('#jName').onkeydown = e => { if (e.key === 'Enter') $('#jGo').click(); };
+$('#jGo').onclick = async () => {
+  speak(' ');
+  const code = $('#jCode').value.trim(), name = $('#jName').value.trim();
+  if (!/^\d{4}$/.test(code)) return ($('#jMsg').textContent = '4자리 반 입장 코드를 써 주세요.');
+  if (!name) return ($('#jMsg').textContent = '이름을 써 주세요.');
+  const r = await call('s:join', { code, name });
+  if (!r.ok) return ($('#jMsg').textContent = r.msg || '입장하지 못했어요.');
+  LS.set('mib_token', r.token); LS.set('mib_code', code); LS.set('mib_name', name);
+  sfx.ok();
+};
+$('#pGo').onclick = async () => {
+  speak(' ');
+  const name = $('#pName').value.trim() || '신입 요원';
+  LS.set('mib_name', name);
+  const r = await call('s:practice', { name, unit: $('#pUnit').value, cases: $('#pUnit').value === 'all' ? 3 : 2 });
+  if (r.ok) { LS.set('mib_token', r.token); sfx.ok(); }
+};
+sock.on('connect', async () => {
+  const tk = LS.get('mib_token');
+  if (tk) { const r = await call('s:join', { token: tk }); if (!r.ok) LS.del('mib_token'); }
+});
+sock.on('kicked', m => { LS.del('mib_token'); show('sJoin'); toast(m, 4000); V = null; });
+sock.on('ended', () => toast('선생님이 작전을 끝냈어요. 수고했어요, 요원!', 4000));
+sock.on('tts', d => setTimeout(() => speak(d.text), d.delay || 0));
+
+/* ---------- 상태 ---------- */
+sock.on('state', v => {
+  const first = !V; const prev = V; V = v;
+  if (first && v.scan) lastScan = v.scan.seq;
+  if (first && v.reveal) revealSpoken = v.no;
+  if (prev && prev.phase === 'brief' && v.phase === 'inv' && prev.no === v.no) playCountdown();
+  render();
+});
+function playCountdown() {
+  let ov = $('#cdOv'); if (ov) ov.remove();
+  ov = document.createElement('div'); ov.id = 'cdOv'; document.body.appendChild(ov);
+  const seq = ['cd-3', 'cd-2', 'cd-1', 'cd-go'];
+  let i = 0;
+  const step = () => { if (i >= seq.length) { ov.remove(); return; } beep(i === 3 ? 980 : 620, .12, 'triangle', .07); ov.innerHTML = `<img src="img/${seq[i]}.png">`; i++; setTimeout(step, 620); };
+  step();
+}
+setInterval(() => { if (V && V.phase === 'inv') { V.elapsed += 1000; $('#tTimer').textContent = mmss(V.elapsed); if (V.vote) renderVote(); } }, 1000);
+const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+
+function render() {
+  const v = V; if (!v) return;
+  if (v.phase === 'wait') {
+    show('sWait');
+    $('#wHead').textContent = `외계인 조사본부 · ${v.cls || ''}`;
+    if (!$('#wPhoto')._h) { $('#wPhoto')._h = 1; const nm = String(v.name || ''); let hsh = 0; for (const ch of nm) hsh += ch.charCodeAt(0); $('#wPhoto').innerHTML = ART.agent(hsh, 150); }
+    $('#wName').textContent = (v.name || '') + ' 요원';
+    $('#wTeam').textContent = v.members ? `${v.team} · ${v.members.map(m => m.name).join(', ')}` : '팀 배정을 기다리는 중…';
+    return;
+  }
+  show('sGame');
+  const briefBg = v.final ? 'bg-repair' : (v.no === 1 ? 'bg-hq' : 'bg-alley');
+  setBg({ brief: briefBg, inv: 'bg-desk', reveal: 'bg-scan', report: 'bg-paper', reportDone: 'bg-paper', missionDone: 'bg-dawn' }[v.phase] || briefBg);
+  $('#hTeam').textContent = (v.practice ? '연습 · ' : '') + v.team;
+  $('#hCase').textContent = `사건 ${v.no} / ${v.total}`;
+  setH($('#hParts'), v.allParts.map((p, i) => `<i class="${i < v.parts.length ? 'on' : ''}" title="${esc(p)}"></i>`).join(''));
+  setH($('#hMem'), v.members.map((m, i) => `<span class="${m.me ? 'me' : ''} ${m.online ? '' : 'off'}">${roleImg(i)}${m.bot ? '🤖' : ''} ${esc(m.name)}</span>`).join(''));
+  $('#hScore').textContent = v.score + ' pt';
+  $('#actbar').classList.toggle('hidden', v.phase !== 'inv');
+  const main = $('#main');
+  if (v.phase === 'brief') return setH(main, briefHTML(v));
+  if (v.phase === 'inv') { renderInv(v); checkScan(v); renderVote(); renderModal(); return; }
+  $('#voteBox').innerHTML = '';
+  if (v.phase !== 'inv' && modalMode && modalMode !== 'done') closeModal();
+  if (v.phase === 'reveal') { checkScan(v); if (!scanBusy) setH(main, revealHTML(v)); if (revealSpoken !== v.no && !scanBusy) { revealSpoken = v.no; setTimeout(() => speak(v.reveal.line[0]), 600); } return; }
+  if (v.phase === 'report' || v.phase === 'reportDone') return renderReport(v);
+  if (v.phase === 'missionDone') return setH(main, doneHTML(v));
+}
+
+/* ---------- 브리핑 ---------- */
+function briefHTML(v) {
+  const s = v.scenario;
+  const pro = v.no === 1 ? `<div class="prolog">📡 <b>본부 긴급 공지</b><br>외계인들의 신분과 생활 기록을 관리하던 <b>‘지구 생활 번역기’</b>가 사라졌어요! 기록이 뒤섞이면서 도시 곳곳에서 이상 현상이 일어나고 있어요.<br>신입 요원 여러분, 영어 단서를 모아 <b>위장 장치가 고장 난 외계인</b>을 찾아 주세요. 사건을 해결할 때마다 번역기 부품을 하나씩 되찾아요.</div>` : '';
+  const fin = v.final ? `<div class="prolog" style="display:flex;gap:12px;align-items:center"><img src="img/ui-chipgold.png" style="width:72px;flex:none"><span>🛰️ <b>최종 작전!</b> 지금까지 모은 부품으로 번역기의 신호를 잡았어요. 여러 단원의 단서를 모두 합쳐야 해요.</span></div>` : '';
+  const me = v.members.findIndex(m => m.me);
+  return `<div class="brief panel">
+    <div class="chap">${esc(v.chapter)}</div>
+    ${pro}${fin}
+    <div class="place"><img src="img/ui-radar.png" style="width:92px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))">
+      <div><span class="tag">출동 장소</span><h2>${esc(s.title)}</h2><div style="color:var(--mute)">${esc(s.place)}</div></div></div>
+    <div class="row"><b>이상 현상</b> · ${esc(s.anomaly)}</div>
+    <div class="row"><b>수사 목표</b> · ${esc(s.role)} ${v.candidates.length}명 가운데 위장 장치가 고장 난 외계인 1명을 찾아 스캔하기</div>
+    <div class="row"><b>복습 단원</b> · ${v.unitTitles.map(u => `${u.u}단원 <span class="en">${esc(u.t)}</span>`).join(' / ')}</div>
+    <div class="row"><b>수사 방법</b> · ① 내 기밀 정보를 확인하고 <b>단서 전달</b> ② 친구가 보낸 단서를 듣고 <b>해독</b> ③ 후보 서류와 <b>인터뷰</b>로 대조 ④ 근거를 골라 <b>스캔</b></div>
+    <div class="props">${[0, 1, 2].map(k => `<img src="img/${['ev-card', 'ev-key', 'ev-umb', 'ev-rec', 'ev-jar', 'ev-paper'][(v.no * 2 + k) % 6]}.png">`).join('')}<span>현장에서 수거한 소지품 — 수사에 참고하세요!</span></div>
+    <div class="readyrow">${v.members.map((m, i) => `<span class="${v.ready[i] ? 'ok' : ''}">${v.ready[i] ? '✔' : '…'} ${roleImg(i)}${esc(m.name)}</span>`).join('')}</div>
+    <button class="btn gold" style="width:100%" onclick="readyGo()" ${v.ready[me] ? 'disabled' : ''}>${v.ready[me] ? '팀원을 기다리는 중…' : '준비 완료! 출동'}</button>
+  </div>`;
+}
+async function readyGo() { sfx.tick(); await call('s:ready'); }
+
+/* ---------- 수사 ---------- */
+function renderInv(v) {
+  const main = $('#main');
+  if (!main.querySelector('.inv')) { main._h = null; main.innerHTML = `<div class="inv"><div><div id="iSecret"></div><div class="panel" style="margin-top:12px"><h3 class="ptitle"><img class="ticon" src="img/ic-wave.png"> 팀 단서판</h3><div id="iClues"></div></div><div class="panel" style="margin-top:12px"><h3 class="ptitle" style="font-size:16px"><img class="ticon" src="img/ic-antenna.png"> 수사 기록</h3><div class="feed" id="iFeed"></div></div></div>
+    <div><div class="panel"><div class="tabs"><button data-t="cards"><img class="ticon" src="img/pin-glass.png" style="vertical-align:-6px"> 조사 대상</button><button data-t="cmp"><img class="ticon" src="img/ic-link.png" style="vertical-align:-6px"> 증거 대조표</button></div><div id="iBody"></div></div></div></div>`;
+    main.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; render(); }); }
+  main.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab));
+  // 기밀 정보
+  const c = v.myClue;
+  setH($('#iSecret'), c ? `<div class="secret"><div class="stitle">🗂️ 나만의 기밀 정보</div>
+     <div class="txt">${esc(c.text)}</div>
+     ${c.hint ? `<div class="hint">💡 ${esc(c.hint)}</div>` : ''}
+     <div class="acts" style="margin-top:10px"><button class="spk" onclick="speak(V.myClue.text)">🔊</button>
+       ${c.posted ? '<span class="tag" style="background:#124d39;color:#9dffc8">전송 완료 ✔</span>' : `<button class="btn green sm" onclick="postClue()">📡 단서 전달</button>`}
+       ${c.hint ? '' : `<button class="btn dark sm" onclick="useHint()"><img src="img/ic-bulb.png" style="width:18px;vertical-align:-4px"> 뜻 보기 (-5점)</button>`}</div>
+     <div class="foot">소리 내어 읽어 주고, 단서 전달을 누르세요.</div></div>`
+    : `<div class="secret"><div class="txt" style="font-size:17px">이번 사건은 기밀 정보가 없어요. 친구들의 단서를 해독하고 대조를 도와주세요!</div></div>`);
+  // 단서판
+  setH($('#iClues'), v.clues.map(c => {
+    const who = `<div class="who"><span>${c.mine ? '내 단서' : esc(c.owner) + ' 요원'}</span><span>${c.status === 'decoded' ? `<img src="img/pin-check.png" style="width:15px;vertical-align:-3px"> 해독 완료` : { sent: '전송함', pending: '해독 필요!', hidden: '아직 안 보냄' }[c.status]}</span></div>`;
+    if (c.status === 'pending') return `<div class="clue pending">${who}<div class="t" style="display:flex;gap:8px;align-items:center"><button class="spk" onclick="speak(${esc(JSON.stringify(c.full))})">🔊</button><span>${esc(c.text)}</span></div>
+      <div class="opts" data-i="${c.i}">${c.opts.map(o => `<button onclick="decode(${c.i},this)">${esc(o)}</button>`).join('')}</div></div>`;
+    if (c.status === 'hidden') return `<div class="clue locked">${who}<div class="t"><img src="img/pin-lock.png" style="width:18px;vertical-align:-4px"> ${c.mine ? '위의 내 기밀 정보에서 [단서 전달]을 누르세요.' : `${esc(c.owner)} 요원의 단서를 기다리는 중…`}</div></div>`;
+    return `<div class="clue decoded">${who}<div class="t" style="display:flex;gap:8px;align-items:center"><button class="spk" onclick="speak(${esc(JSON.stringify(c.text))})">🔊</button><span>${esc(c.text)}</span></div></div>`;
+  }).join(''));
+  setH($('#iFeed'), v.feed.slice().reverse().map(f => `<div>${esc(f)}</div>`).join(''));
+  // 후보
+  if (tab === 'cards') setH($('#iBody'), `<div class="cands">${v.candidates.map(cd => `<div class="cand ${cd.marked ? 'marked' : ''} ${cd.cleared ? 'cleared' : ''}" onclick="openCand('${cd.id}')">
+      <div class="lt">${cd.id}</div>${cd.asked.length ? `<div class="qcount">🎤 ${cd.asked.length}</div>` : ''}${wimg(cd, 110)}
+      <div class="nm">${esc(cd.name)}</div><div class="rl">${esc(v.scenario.role)}</div></div>`).join('')}</div>
+      <p style="color:var(--mute);font-size:13px;margin:10px 0 0">후보를 누르면 서류를 보고 영어로 질문할 수 있어요. 아닌 것 같은 후보는 ✕ 표시를 해 두세요.</p>`);
+  else setH($('#iBody'), cmpHTML(v));
+  $('#bHq').disabled = !v.hqReady;
+  $('#bAccuse').disabled = !!v.vote;
+  $('#tTimer').textContent = mmss(v.elapsed);
+}
+const DOCNAME = { photo: '📷 사진', id: '🪪 신원 카드', record: '📊 측정 기록', schedule: '📅 일정표', receipt: '🧾 영수증', note: '📝 메모', interview: '🎤 인터뷰' };
+function cmpHTML(v) {
+  if (!v.rows.length) return '<p>대조할 기록이 아직 없어요.</p>';
+  const head = `<tr><th><img src="img/src-1.png" style="width:22px;vertical-align:-6px"> 기록</th>${v.candidates.map(cd => `<th class="${cd.cleared ? 'x' : ''}"><div class="ava">${wimg(cd, 44)}<span>${cd.id} ${esc(cd.name)}${cd.marked ? ' <span class="x">✕</span>' : ''}</span></div></th>`).join('')}</tr>`;
+  const body = v.rows.map(r => `<tr><td><div style="font-size:11px;color:var(--mute)">${DOCNAME[r.doc]}</div><span class="en">${esc(r.field)}</span></td>${v.candidates.map(cd => {
+    const d = cd.docs.find(x => x.dim === r.dim);
+    if (d) return `<td>${esc(d.a || d.text)}</td>`;
+    return `<td class="q" onclick="askQ('${cd.id}','${r.dim}')" title="질문해서 알아보기"><img src="img/tag-q.png" style="width:46px;vertical-align:middle"></td>`;
+  }).join('')}</tr>`).join('');
+  const any = v.rows.some(r => r.doc === 'interview');
+  return `<div class="cmp"><table>${head}${body}</table></div><p style="color:var(--mute);font-size:13px;margin:10px 0 0">${any ? '🎤 ? 칸을 누르면 그 후보에게 같은 질문을 해요. ' : ''}인터뷰 기록은 후보에게 질문해야 이 표에 나타나요.</p>`;
+}
+async function postClue() { const r = await call('s:post'); if (r.ok) { sfx.ok(); toast('단서를 전송했어요! 친구들 기기에서 소리가 나요.'); } }
+async function useHint() { await call('s:hint'); }
+async function decode(i, btn) {
+  const r = await call('s:decode', { i, choice: btn.textContent });
+  if (r.ok) { sfx.ok(); toast('해독 성공!'); } else { sfx.no(); btn.classList.add('bad'); setTimeout(() => btn.classList.remove('bad'), 400); }
+}
+async function askQ(cand, qid) {
+  const r = await call('s:ask', { cand, qid });
+  if (r.ok) { speak(r.q); setTimeout(() => speak(r.a), 1700); }
+}
+$('#bHq').onclick = async () => { const r = await call('s:hq'); if (!r.ok && r.msg) toast(r.msg); };
+$('#bAccuse').onclick = () => { accuse = { cand: null, basis: V.clues.filter(c => c.status === 'decoded' || c.mine).map(c => c.i) }; modalMode = 'accuse'; renderModal(); };
+
+/* ---------- 모달: 후보 서류 / 지목 ---------- */
+function openCand(id) { modalCand = id; modalMode = 'cand'; renderModal(); }
+function closeModal() { modalMode = null; $('#modal').classList.add('hidden'); $('#mbox')._h = null; }
+$('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+function renderModal() {
+  if (!modalMode || !V || V.phase !== 'inv') return;
+  $('#modal').classList.remove('hidden');
+  if (modalMode === 'cand' || modalMode === 'ask') {
+    const cd = V.candidates.find(x => x.id === modalCand);
+    const groups = {};
+    for (const d of cd.docs.filter(d => d.doc !== 'interview')) (groups[d.doc] = groups[d.doc] || []).push(d);
+    const order = ['photo', 'id', 'record', 'schedule', 'receipt', 'note'];
+    const docs = order.filter(k => groups[k]).map(k => `<div class="doc ${k}"><h4>${{ photo: 'DESCRIPTION', id: 'ID CARD', record: 'RECORD', schedule: 'SCHEDULE', receipt: 'RECEIPT', note: 'NOTE' }[k]}</h4>${groups[k].map(d => `<div class="line"><span class="f">${esc(d.field)}</span><span>${esc(d.text)}</span></div>`).join('')}</div>`).join('');
+    const iv = cd.docs.filter(d => d.doc === 'interview');
+    const chat = iv.map(d => `<div class="bub q"><div>🕶️ ${esc(d.q)}</div></div><div class="bub a"><div>${esc(d.a)}</div><button class="spk" onclick="speak(${esc(JSON.stringify(d.a))})">🔊</button></div>`).join('');
+    const qs = modalMode === 'ask' ? `<div class="qlist">${V.questions.map(q => `<button onclick="ask('${cd.id}','${q.qid}')">${cd.asked.includes(q.qid) ? `<img src="img/tag-ok.png" style="width:40px;vertical-align:middle;margin-right:4px">` : ''}${esc(q.q)}</button>`).join('')}</div>` : `<button class="btn" style="margin-top:8px" onclick="modalMode='ask';renderModal()"><img src="img/ic-chat.png" style="width:20px;vertical-align:-5px"> 영어로 질문하기</button>`;
+    setH($('#mbox'), `<div class="mhead"><div class="pframe">${wimg(cd, 74)}</div><div><span class="tag">후보 ${cd.id}</span><h2 style="margin:4px 0;font-family:Nunito;font-weight:900">${esc(cd.name)}</h2><div style="color:var(--mute)">${esc(V.scenario.role)}</div>
+      ${cd.cleared ? '<div style="color:var(--green);font-weight:800">✔ 지구인으로 확인됨</div>' : ''}</div><button class="btn dark sm x" onclick="closeModal()">닫기</button></div>
+      <div class="docs">${docs}</div>
+      <div class="chat"><h3 class="ptitle" style="font-size:16px"><img class="ticon" src="img/src-0.png"> 인터뷰 기록</h3>${chat || '<p style="color:var(--mute);margin:0">아직 질문하지 않았어요. 사건에 맞는 질문을 골라 보세요.</p>'}${qs}</div>
+      <div style="display:flex;gap:8px;margin-top:14px">${cd.cleared ? '' : `<button class="btn ${cd.marked ? 'dark' : 'red'} sm" onclick="mark('${cd.id}')">${cd.marked ? '✕ 표시 지우기' : '✕ 아닌 것 같아요'}</button>`}</div>`);
+  } else if (modalMode === 'accuse') {
+    const live = V.candidates.filter(c => !c.cleared);
+    const can = V.clues.filter(c => c.status === 'decoded' || c.mine);
+    setH($('#mbox'), `<div class="mhead"><h3 class="ptitle" style="margin:0;background-image:url('img/tb-gold.png');color:#2a1c00;text-shadow:none">🛸 위장 외계인 지목</h3><button class="btn dark sm x" onclick="closeModal()">닫기</button></div>
+      <p style="margin:6px 0 10px;color:var(--mute)">① 스캔할 후보를 고르고 ② 판단 근거가 된 단서를 고르세요. 팀원이 모두 동의하면 스캔해요.</p>
+      <div class="pick">${live.map(cd => `<div class="cand ${accuse.cand === cd.id ? 'sel' : ''}" onclick="accuse.cand='${cd.id}';renderModal()"><div class="lt">${cd.id}</div>${wimg(cd, 76)}<div class="nm" style="font-size:15px">${esc(cd.name)}</div></div>`).join('')}</div>
+      <h3 class="ptitle" style="font-size:16px;margin-top:14px">판단 근거</h3>
+      ${can.length ? can.map(c => `<label class="chk"><input type="checkbox" ${accuse.basis.includes(c.i) ? 'checked' : ''} onchange="toggleBasis(${c.i})"><span>${esc(c.text)}</span></label>`).join('') : '<p>해독한 단서가 없어요.</p>'}
+      ${V.clues.some(c => c.status === 'hidden' || c.status === 'pending') ? '<p style="color:var(--gold);font-size:14px"><img src="img/pin-alert.png" style="width:22px;vertical-align:-6px"> 아직 해독하지 못한 단서가 있어요. 모든 단서를 합쳐야 정답이 하나로 정해져요.</p>' : ''}
+      <button class="btn gold" style="width:100%;margin-top:10px" onclick="sendAccuse()" ${accuse.cand && accuse.basis.length ? '' : 'disabled'}>🔍 스캔 요청</button>`);
+    $('#mbox')._h = null;
+  }
+}
+function toggleBasis(i) { accuse.basis = accuse.basis.includes(i) ? accuse.basis.filter(x => x !== i) : [...accuse.basis, i]; renderModal(); }
+async function sendAccuse() { const r = await call('s:propose', accuse); if (r.ok === false && r.msg) return toast(r.msg); closeModal(); sfx.tick(); }
+async function ask(cand, qid) {
+  const r = await call('s:ask', { cand, qid });
+  if (!r.ok) return;
+  speak(r.q); setTimeout(() => speak(r.a), 1700);
+  if (qid.startsWith('x')) toast(`"${r.a}" — 사건과 관련 없는 질문이에요.`, 2600);
+  modalMode = 'cand'; renderModal();
+}
+async function mark(id) { await call('s:mark', { cand: id }); }
+
+/* ---------- 투표 ---------- */
+function renderVote() {
+  const v = V, box = $('#voteBox');
+  if (!v || v.phase !== 'inv' || !v.vote) { box.innerHTML = ''; return; }
+  const cd = v.candidates.find(c => c.id === v.vote.cand);
+  const basis = v.vote.basis.map(i => v.clues[i] && v.clues[i].text).filter(Boolean);
+  const left = Math.max(0, v.vote.left - Math.floor((Date.now() - (v._vt || (v._vt = Date.now()))) / 1000));
+  box.innerHTML = `<div class="votebar panel"><div style="display:flex;gap:12px;align-items:center"><img class="vico" src="img/vote-box.png">${wimg(cd, 54)}<div style="flex:1"><b>${esc(v.vote.by)}</b> 요원이 <b>${cd.id} ${esc(cd.name)}</b> 스캔을 제안했어요.
+    <div style="font-size:13px;color:var(--mute);margin-top:4px">근거: ${basis.map(esc).join(' / ')}</div></div><span class="tag">${left}초</span></div>
+    ${v.vote.myVote === undefined ? `<div style="display:flex;gap:8px;margin-top:10px"><button class="btn green" style="flex:1" onclick="vote(true)"><img src="img/vote-agree.png" style="width:20px;vertical-align:-4px"> 동의</button><button class="btn red" style="flex:1" onclick="vote(false)"><img src="img/vote-split.png" style="width:20px;vertical-align:-4px"> 반대</button></div>` : '<div style="margin-top:8px;color:var(--mute)"><img src="img/vote-wait.png" style="width:18px;vertical-align:-4px"> 다른 요원의 응답을 기다리는 중… (응답이 없으면 동의로 처리돼요)</div>'}</div>`;
+}
+async function vote(a) { await call('s:vote', { agree: a }); }
+
+/* ---------- 스캔 연출 ---------- */
+function checkScan(v) {
+  if (!v.scan || v.scan.seq === lastScan) return;
+  lastScan = v.scan.seq;
+  const cd = v.candidates.find(c => c.id === v.scan.cand);
+  scanBusy = true; closeModal(); sfx.scan();
+  const el = $('#scan'); el.classList.remove('hidden');
+  const sp = v.reveal ? v.reveal.species : 'pudding';
+  el.innerHTML = `<div class="st">SCANNING · ${cd.id} ${esc(cd.name)}</div><div class="tube"><img class="fx" src="img/fx-shards.png" style="display:none"><div class="h">${wimg(cd, 190)}</div><div class="gl" style="position:absolute;opacity:0;transition:opacity .4s">${v.scan.ok ? ART.alienGlitch(sp, 215) : ''}</div><div class="al">${v.scan.ok ? ART.alien(sp, 215) : ''}</div></div><div id="scanRes" style="min-height:70px"></div>`;
+  setTimeout(() => {
+    if (v.scan.ok) {
+      el.querySelector('.h').classList.add('fade'); el.querySelector('.fx').style.display = '';
+      const g = el.querySelector('.gl'); g.style.opacity = 1;
+      setTimeout(() => { g.style.opacity = 0; el.querySelector('.al').classList.add('on'); sfx.win(); $('#scanRes').innerHTML = `<img class="stampimg" src="img/stamp-alien.png">`; }, 900);
+    } else { sfx.no(); $('#scanRes').innerHTML = `<img class="stampimg" src="img/stamp-human.png" style="width:min(240px,50vw)"><p style="text-align:center">진짜 지구인이었어요. 단서를 다시 맞춰 봐요! (-15점)</p>`; }
+    setTimeout(() => { el.classList.add('hidden'); scanBusy = false; render(); }, v.scan.ok ? 3400 : 2600);
+  }, 2300);
+}
+
+/* ---------- 정체 공개 ---------- */
+function revealHTML(v) {
+  const r = v.reveal;
+  return `<div class="reveal"><div><div class="tube"><div class="reveal-burst"></div><div class="al on">${ART.alien(r.species, 215)}</div></div><img class="pedestal" src="img/ui-pedestal.png"></div>
+    <div><span class="tag">정체 공개 · 후보 ${r.cand} ${esc(r.name)}</span><h2>${esc(r.alien)} <span class="en" style="font-size:18px;color:var(--mute)">${esc(r.en)}</span></h2>
+    <div class="gag">${esc(r.gag)}</div><div style="color:var(--mute)">${esc(r.trait)}</div>
+    <div class="say"><button class="spk" style="background:#2cc4e8;color:#04101f" onclick="speak(${esc(JSON.stringify(r.line[0]))})">🔊</button><div><div class="en">${esc(r.line[0])}</div><div class="ko">${esc(r.line[1])}</div></div></div>
+    <div class="cluebox"><span class="tbteal">결정적 단서</span>${r.clues.map(c => `<div class="en" style="margin-top:8px">• ${esc(c)}</div>`).join('')}</div>
+    <button class="btn gold" style="width:100%;margin-top:12px" onclick="call('s:toReport')">📝 사건 보고서 쓰기</button></div></div>`;
+}
+
+/* ---------- 보고서 ---------- */
+function renderReport(v) {
+  const main = $('#main');
+  if (!main.querySelector('.report') || main._case !== v.no) {
+    main._h = null; main._case = v.no;
+    main.innerHTML = `<div style="max-width:760px;margin:18px auto">
+      <div class="repcard"><div class="polaroid" id="rPola"></div>
+        <div class="rgold" id="rTitle"></div><div class="rs1" id="rPlace"></div><div class="rs2" id="rAlien"></div>
+        <div class="rbig"><img src="img/src-2.png" style="width:40px">내 단서의 빈칸을 영어로 채워<br>팀 보고서를 완성하세요!</div></div>
+      <div class="report" style="margin:0"><div id="rMine"></div><div id="rAll"></div></div></div>`;
+  }
+  const r = v.reveal;
+  setH($('#rTitle'), `사건 보고서 No.${v.no} · ${esc(v.scenario.title)}`);
+  setH($('#rPlace'), `📍 ${esc(v.scenario.place)}`);
+  setH($('#rAlien'), `👽 ${esc(r.alien)} (${esc(r.name)})`);
+  if (!$('#rPola')._h) { $('#rPola')._h = 1; $('#rPola').innerHTML = ART.alien(r.species, 70); }
+  const mine = v.report.find(x => x.mine);
+  const mineH = mine ? (mine.done ? `<div class="rline mine done"><div class="who">내 단서 ✔</div><div class="s">${esc(mine.text)}</div></div>`
+    : `<div class="rline mine"><div class="who">내 단서 · 첫 글자 <b>${esc(mine.first)}</b> · ${mine.len}글자</div><div class="s">${esc(mine.blank)}</div>
+      ${mine.opts ? `<div class="opts">${mine.opts.map(o => `<button style="background:#fff;color:#123;border-color:#2cc4e8" onclick="document.getElementById('rIn').value=this.textContent">${esc(o)}</button>`).join('')}</div>` : ''}
+      <div style="display:flex;gap:8px"><input id="rIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="빈칸에 들어갈 말"><button class="btn sm" style="margin-top:8px;white-space:nowrap;flex:none" onclick="sendReport()">제출</button></div>
+      ${mine.tries ? `<div style="color:#c0392b;font-size:13px;margin-top:4px">다시 해 봐요! (${mine.tries}번 틀림)</div>` : ''}</div>`) : '';
+  const k = mine ? JSON.stringify([mine.done, mine.tries, !!mine.opts]) : 'x';
+  if ($('#rMine')._k !== k) { $('#rMine')._k = k; $('#rMine').innerHTML = mineH; const i = $('#rIn'); if (i) { i.onkeydown = e => { if (e.key === 'Enter') sendReport(); }; } }
+  setH($('#rAll'), v.report.filter(x => !x.mine).map(x => `<div class="rline ${x.done ? 'done' : ''}"><div class="who">${esc(x.owner)} 요원 ${x.done ? '✔' : '작성 중…'}</div><div class="s">${esc(x.done ? x.text : x.blank)}</div></div>`).join('')
+    + (v.phase === 'reportDone' ? `<div style="text-align:center;font-size:20px;margin-top:12px">🎉 보고서 완성! 번역기 부품 <b>${esc(v.allParts[v.parts.length] || '')}</b> 회수!</div>` : ''));
+}
+async function sendReport() {
+  const i = $('#rIn'); if (!i || !i.value.trim()) return;
+  const r = await call('s:report', { answer: i.value });
+  if (r.ok) sfx.ok(); else { sfx.no(); i.value = ''; }
+}
+
+/* ---------- 작전 완료 ---------- */
+function doneHTML(v) {
+  const chipImgs = ['chip-a', 'chip-b', 'chip-ring', 'chip-ok'];
+  return `<div class="done panel"><img class="medal" src="img/badge-gold.png"><h2 style="font-family:'Black Han Sans';font-weight:400;font-size:34px;margin:6px 0;color:var(--gold)">작전 완료!</h2>
+    <p style="margin:4px 0">되찾은 번역기 부품 ${v.parts.length}개 · 총 작전 시간 ${Math.floor(v.totalSec / 60)}분 ${v.totalSec % 60}초</p>
+    <div class="stamps">${(v.stamps || []).map(s => `<div class="st1 ${s.ok ? '' : 'off'}"><img src="img/${s.img}.png"><b>${esc(s.name)}</b><span>${s.ok ? esc(s.desc) : '다음에 도전!'}</span></div>`).join('')}</div>
+    <div class="chips">${v.parts.map((p, i) => `<div class="chip1"><img src="img/${chipImgs[i % 4]}.png"><div>${esc(p)}</div></div>`).join('')}</div>
+    <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;align-items:flex-end">${['pudding', 'eyes', 'noodle', 'twins', 'pouch', 'saucer'].map(k => ART.alien(k, 64)).join('')}</div>
+    <p style="color:var(--mute)">외계인들이 "Thank you, agents!" 하고 인사해요.</p>
+    <table class="rt"><tr><th>사건</th><th>단원</th><th>시간</th><th>오답 스캔</th><th>점수</th></tr>${v.results.map(r => `<tr><td>${esc(r.title)}</td><td>${r.units.join('·')}</td><td>${Math.floor(r.sec / 60)}분 ${r.sec % 60}초</td><td>${r.wrong}</td><td>${r.score}</td></tr>`).join('')}
+    <tr><th colspan="4">합계</th><th style="color:var(--gold)">${v.score}</th></tr></table>
+    ${v.practice ? `<div style="display:flex;gap:10px;justify-content:center;margin-top:14px"><button class="btn gold" onclick="call('s:again')">다시 연습하기</button><button class="btn dark" onclick="leave()">처음으로</button></div>` : '<p style="margin-top:14px">선생님의 안내를 기다려 주세요.</p>'}</div>`;
+}
+function leave() { sock.emit('s:leave'); LS.del('mib_token'); V = null; show('sJoin'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>맨 인 블랙 · 선생님 관리</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Orbitron:wght@600;800&family=Nunito:wght@700;800;900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#060b18;--panel:#0f1b3a;--line:#2a4a86;--glow:#38e1ff;--gold:#ffc83d;--ink:#e9f2ff;--mute:#8ea7d4;--red:#ff5d6c;--green:#47e08f}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1000px 500px at 50% -10%,#16306b,transparent 60%),var(--bg);color:var(--ink);font-family:'Gowun Dodum',sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:url('img/bg-gate.jpg') center/cover no-repeat;opacity:.3}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,8,20,.3),rgba(4,8,20,.75))}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1240px;margin:0 auto;padding:16px}
+.panel{background:linear-gradient(180deg,#13244a,#0b1630);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+h1{font-family:'Black Han Sans';font-weight:400;margin:0;font-size:30px;background:linear-gradient(180deg,#fff,#38c3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-family:'Black Han Sans';font-weight:400;color:var(--gold);margin:0 0 10px;font-size:19px}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:800;font-size:15px;color:#061024;background:linear-gradient(180deg,#8ff0ff,#2cc4e8);box-shadow:0 3px 0 #157a96}
+.btn.gold{background:linear-gradient(180deg,#ffe07a,#ffb21c);box-shadow:0 3px 0 #b5700b}
+.btn.red{background:linear-gradient(180deg,#ff9aa4,#ff4f62);box-shadow:0 3px 0 #a32033}
+.btn.dark{background:#1b2d57;color:var(--ink);box-shadow:0 3px 0 #0c1733;border:1px solid var(--line)}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:9px}
+.btn:active{transform:translateY(2px)}
+input,select{font-family:inherit;font-size:16px;padding:9px 12px;border-radius:10px;border:2px solid var(--line);background:#0a1532;color:var(--ink)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:#0a1532;color:var(--mute);border-radius:12px;padding:10px 16px;font-weight:800;font-size:15px}
+.tabs button.on{background:#1b3a77;color:#fff;border-color:var(--glow)}
+.grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.unit{display:flex;gap:8px;align-items:flex-start;padding:8px;border-radius:10px;border:1px solid var(--line);background:#0a1532;cursor:pointer;font-size:14px}
+.unit.on{border-color:var(--gold);background:#2a2410}
+.unit input{margin-top:3px}
+.unit small{display:block;color:var(--mute);font-family:Nunito;font-weight:700}
+.opt{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.opt label{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#0a1532;cursor:pointer}
+.opt label.on{border-color:var(--glow);background:#13305e}
+.opt input{display:none}
+.code{font-family:Orbitron;font-size:42px;color:var(--gold);letter-spacing:6px}
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.tcard{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0a1532}
+.tcard h4{margin:0 0 6px;font-family:'Black Han Sans';font-weight:400;font-size:20px;color:var(--glow);display:flex;justify-content:space-between}
+.chip{display:inline-block;font-size:13px;padding:3px 8px;border-radius:999px;background:#13244a;border:1px solid var(--line);margin:2px}
+.chip.off{opacity:.45}
+.bar{height:8px;background:#13244a;border-radius:6px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2cc4e8,#7cf5c8)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:7px 8px;border-bottom:1px solid #1d3466;text-align:left;vertical-align:top}
+th{color:var(--glow)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#555;margin-right:5px}
+.dot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+.ph{font-weight:800}
+.msg{color:var(--red);min-height:20px}
+.book h4{font-family:'Black Han Sans';font-weight:400;font-size:20px;color:var(--glow);margin:4px 0 8px}
+.scen{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:8px}
+.scen div{background:#0a1532;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:14px;line-height:1.5}
+.scen b{color:var(--gold)}
+.en{font-family:Nunito;font-weight:800}
+.aliens{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.aliens div{text-align:center;background:#0a1532;border:1px solid var(--line);border-radius:14px;padding:10px;font-size:13px}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:#13244a;border:1px solid var(--glow);padding:10px 16px;border-radius:12px;font-weight:800;z-index:9}
+.a-jiggle{transform-origin:60px 100px;animation:jig 1.2s ease-in-out infinite}@keyframes jig{50%{transform:scale(1.06,.93)}}
+.a-hat{animation:hat 2.4s ease-in-out infinite}@keyframes hat{50%{transform:translate(4px,-6px)}}
+.a-bob{animation:bob 1s infinite}@keyframes bob{50%{transform:translateY(-4px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row" style="justify-content:space-between;margin-bottom:12px"><h1>맨 인 블랙 · 선생님 관리</h1><span id="who" style="color:var(--mute)"></span></div>
+
+  <div class="panel" id="login" style="max-width:420px;margin:60px auto">
+    <h3>🔐 선생님 로그인</h3>
+    <div class="row"><input id="pw" type="password" placeholder="비밀번호" style="flex:1"><button class="btn gold" id="pwGo">로그인</button></div>
+    <div class="msg" id="pwMsg"></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <div class="row" style="margin-bottom:12px">
+      <div class="tabs" id="clsTabs"></div>
+      <span style="flex:1"></span>
+      <div class="tabs" id="viewTabs"><button data-v="live" class="on">🛰️ 진행</button><button data-v="results">📊 결과</button><button data-v="book">📖 시나리오 북</button></div>
+    </div>
+
+    <div id="vLive">
+      <div class="grid2">
+        <div class="panel">
+          <h3>⚙️ 작전 설정</h3>
+          <div class="row" style="justify-content:space-between"><b>복습 단원</b><span><button class="btn dark sm" id="uAll">전체 선택</button> <button class="btn dark sm" id="uNone">모두 해제</button></span></div>
+          <div class="units" id="units" style="margin:8px 0 12px"></div>
+          <b>출제 방식</b>
+          <div class="opt" id="oMode"><label><input type="radio" name="mode" value="unit">한 사건에 한 단원 (단원별 연습)</label><label><input type="radio" name="mode" value="mix">한 사건에 여러 단원 (섞어서)</label></div>
+          <div class="row" style="gap:18px">
+            <div><b>사건 수</b><div class="opt" id="oCases"></div></div>
+            <div><b>팀 인원</b><div class="opt" id="oTeam"><label><input type="radio" name="team" value="3">3명</label><label><input type="radio" name="team" value="4">4명</label></div></div>
+          </div>
+          <div class="opt"><label id="lFinal"><input type="checkbox" id="oFinal"> 마지막 사건은 ‘번역기 회수 작전’(고른 단원 종합)</label><label id="lBots"><input type="checkbox" id="oBots"> 빈자리는 AI 요원이 채우기</label></div>
+          <div class="row"><button class="btn gold" id="saveSet">설정 저장</button><span id="setNote" style="color:var(--mute);font-size:14px"></span></div>
+        </div>
+        <div class="panel">
+          <h3>🚪 학생 입장</h3>
+          <div class="row" style="align-items:flex-start;gap:16px">
+            <div id="qr" style="background:#fff;padding:8px;border-radius:10px"></div>
+            <div><div style="color:var(--mute)">반 입장 코드</div><div class="code" id="code"></div>
+              <div style="color:var(--mute);font-size:14px;margin-top:4px">학생 주소</div><div class="en" id="url" style="word-break:break-all"></div></div>
+          </div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn" id="bAssign">👥 자동 배정</button>
+            <button class="btn gold" id="bStart">🚀 작전 시작</button>
+            <button class="btn red" id="bEnd">⏹ 작전 끝내기</button>
+            <button class="btn dark sm" id="bClear">대기실 비우기</button>
+          </div>
+          <p style="color:var(--mute);font-size:13px;margin:10px 0 0">자동 배정 없이 바로 ‘작전 시작’을 눌러도 자동으로 팀을 나눠요. 작전 중에 들어온 학생은 AI 요원 자리나 빈자리에 자동으로 들어가요.</p>
+          <div id="status" style="margin-top:10px;font-weight:800"></div>
+        </div>
+      </div>
+      <div class="panel"><h3>🕶️ 팀 현황</h3><div class="teams" id="teams"></div></div>
+      <div class="panel"><h3>🧑‍🎓 접속한 학생 <span id="pCount" style="color:var(--mute);font-size:15px"></span></h3><div id="players"></div></div>
+    </div>
+
+    <div id="vResults" style="display:none" class="panel">
+      <div class="row" style="justify-content:space-between"><h3>📊 작전 결과</h3><span><select id="rCls"></select> <button class="btn sm" id="rCsv">엑셀(CSV) 받기</button> <button class="btn red sm" id="rClear">이 반 기록 지우기</button></span></div>
+      <div id="rTable"></div>
+    </div>
+
+    <div id="vBook" style="display:none" class="book"></div>
+  </div>
+</div>
+<div class="toast" id="toast" style="display:none"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/art.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const sock = io();
+const call = (ev, d) => new Promise(r => sock.emit(ev, d, x => r(x || {})));
+let CLASSES = [], UNITS = {}, cur = null, S = null, draft = null, view = 'live', PW = null;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.style.display = ''; clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 2400); }
+
+async function login(pw) {
+  const r = await call('t:login', { pw });
+  if (!r.ok) { $('#pwMsg').textContent = r.msg; try { sessionStorage.removeItem('mib_t'); } catch (e) {} return; }
+  PW = pw; try { sessionStorage.setItem('mib_t', pw); } catch (e) {}
+  CLASSES = r.classes; UNITS = r.units;
+  $('#login').style.display = 'none'; $('#app').style.display = '';
+  $('#clsTabs').innerHTML = CLASSES.map(c => `<button data-c="${c.id}">${c.name}</button>`).join('');
+  $('#clsTabs').querySelectorAll('button').forEach(b => b.onclick = () => watch(b.dataset.c));
+  $('#rCls').innerHTML = '<option value="">전체 반</option>' + CLASSES.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  watch(cur || CLASSES[0].id);
+}
+$('#pwGo').onclick = () => login($('#pw').value);
+$('#pw').onkeydown = e => { if (e.key === 'Enter') login($('#pw').value); };
+sock.on('connect', () => { let p = null; try { p = sessionStorage.getItem('mib_t'); } catch (e) {} if (p) login(p); });
+
+async function watch(id) {
+  cur = id; draft = null;
+  $('#clsTabs').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.c === id));
+  const r = await call('t:watch', { cls: id });
+  if (r.ok) { S = r.state; renderAll(); }
+  const url = location.origin + '/';
+  $('#url').textContent = url; $('#qr').innerHTML = '';
+  try { new QRCode($('#qr'), { text: url, width: 120, height: 120 }); } catch (e) { $('#qr').textContent = url; }
+}
+sock.on('t:state', s => { if (s.id === cur) { S = s; renderLive(); } });
+
+/* ---------- 설정 ---------- */
+function renderAll() { renderSettings(); renderLive(); }
+function renderSettings() {
+  const s = draft || (draft = JSON.parse(JSON.stringify(S.settings)));
+  $('#code').textContent = S.code;
+  $('#units').innerHTML = Object.entries(UNITS).map(([u, x]) => `<label class="unit ${s.units.includes(+u) ? 'on' : ''}"><input type="checkbox" data-u="${u}" ${s.units.includes(+u) ? 'checked' : ''}><span><b>${u}단원</b> ${esc(x.ko)}<small>${esc(x.t)}</small></span></label>`).join('');
+  $('#units').querySelectorAll('input').forEach(i => i.onchange = () => { const u = +i.dataset.u; s.units = i.checked ? [...new Set([...s.units, u])].sort((a, b) => a - b) : s.units.filter(x => x !== u); renderSettings(); });
+  $('#oCases').innerHTML = [1, 2, 3, 4, 5, 6].map(n => `<label class="${s.cases === n ? 'on' : ''}"><input type="radio" name="cases" value="${n}">${n}</label>`).join('');
+  $('#oCases').querySelectorAll('input').forEach(i => i.onchange = () => { s.cases = +i.value; renderSettings(); });
+  $('#oMode').querySelectorAll('label').forEach(l => { const i = l.querySelector('input'); l.classList.toggle('on', i.value === s.mode); i.onchange = () => { s.mode = i.value; renderSettings(); }; });
+  $('#oTeam').querySelectorAll('label').forEach(l => { const i = l.querySelector('input'); l.classList.toggle('on', +i.value === s.teamSize); i.onchange = () => { s.teamSize = +i.value; renderSettings(); }; });
+  $('#oFinal').checked = s.final; $('#lFinal').classList.toggle('on', s.final); $('#oFinal').onchange = e => { s.final = e.target.checked; renderSettings(); };
+  $('#oBots').checked = s.bots; $('#lBots').classList.toggle('on', s.bots); $('#oBots').onchange = e => { s.bots = e.target.checked; renderSettings(); };
+  const changed = JSON.stringify(s) !== JSON.stringify(S.settings);
+  $('#setNote').textContent = (changed ? '바뀐 설정이 있어요. 저장해 주세요. ' : '저장됨. ') + `${s.units.length}개 단원 · 사건 ${s.cases}개${s.final && s.cases >= 2 && s.units.length > 1 ? ' (마지막은 종합 작전)' : ''}`;
+}
+$('#uAll').onclick = () => { draft.units = Object.keys(UNITS).map(Number); renderSettings(); };
+$('#uNone').onclick = () => { draft.units = []; renderSettings(); };
+$('#saveSet').onclick = async () => {
+  if (!draft.units.length) return toast('단원을 하나 이상 골라 주세요.');
+  const r = await call('t:settings', { cls: cur, settings: draft }); if (r.ok) { S.settings = JSON.parse(JSON.stringify(draft)); toast('설정을 저장했어요. 다음 사건부터 적용돼요.'); renderSettings(); }
+};
+$('#bAssign').onclick = async () => { const r = await call('t:assign', { cls: cur }); toast(r.ok ? '팀을 자동으로 나눴어요.' : r.msg); };
+$('#bStart').onclick = async () => {
+  if (JSON.stringify(draft) !== JSON.stringify(S.settings) && draft.units.length) await call('t:settings', { cls: cur, settings: draft }), S.settings = JSON.parse(JSON.stringify(draft));
+  const r = await call('t:start', { cls: cur }); toast(r.ok ? '작전 시작!' : r.msg);
+};
+$('#bEnd').onclick = async () => { if (!confirm('작전을 끝낼까요? 지금까지의 결과는 저장돼요.')) return; const r = await call('t:end', { cls: cur }); toast(r.ok ? '작전을 끝냈어요.' : r.msg); };
+$('#bClear').onclick = async () => { if (!confirm('대기실의 학생을 모두 내보낼까요?')) return; const r = await call('t:clearPlayers', { cls: cur }); toast(r.ok ? '대기실을 비웠어요.' : r.msg); };
+
+/* ---------- 진행 ---------- */
+const PH = { wait: '대기', brief: '출동 브리핑', inv: '🔎 수사 중', reveal: '👽 정체 공개', report: '📝 보고서', reportDone: '📝 보고서 완료', missionDone: '✅ 작전 완료' };
+function renderLive() {
+  if (!S) return;
+  $('#status').innerHTML = S.status === 'running' ? '<span style="color:var(--green)">● 작전 진행 중</span>' : '<span style="color:var(--mute)">● 대기 중</span>';
+  $('#teams').innerHTML = S.teams.length ? S.teams.map(t => {
+    const pct = t.total ? Math.round(((t.no - (t.done ? 0 : 1)) + (t.done ? 0 : t.decoded / Math.max(1, t.clues) * .7)) / t.total * 100) : 0;
+    return `<div class="tcard"><h4><span>${esc(t.name)}</span><span style="font-family:Orbitron;color:var(--gold);font-size:16px">${t.score} pt</span></h4>
+      <div>${t.members.map(m => `<span class="chip ${m.online ? '' : 'off'}">${m.bot ? '🤖' : '🕶️'} ${esc(m.name)}</span>`).join('')}</div>
+      ${t.total ? `<div style="margin-top:6px">사건 ${t.no}/${t.total} · <span class="ph">${PH[t.phase] || t.phase}</span></div>
+      <div style="color:var(--mute);font-size:13px">${esc(t.title)} ${t.units.length ? '· ' + t.units.join('·') + '단원' : ''}</div>
+      <div class="bar"><i style="width:${Math.min(100, pct)}%"></i></div>
+      <div style="font-size:13px;color:var(--mute)">해독 ${t.decoded}/${t.clues} · 오답 스캔 ${t.wrong} · 부품 ${t.parts} · ${t.phase === 'inv' ? Math.floor(t.elapsed / 60) + '분 ' + t.elapsed % 60 + '초' : ''}</div>` : '<div style="color:var(--mute);margin-top:6px">작전 시작 전</div>'}</div>`;
+  }).join('') : '<p style="color:var(--mute)">아직 팀이 없어요. 학생들이 들어오면 ‘자동 배정’ 또는 ‘작전 시작’을 눌러 주세요.</p>';
+  const ps = S.players.slice().sort((a, b) => (a.team || 'zz').localeCompare(b.team || 'zz') || a.name.localeCompare(b.name));
+  $('#pCount').textContent = `${S.players.filter(p => p.online).length}명 접속 / ${S.players.length}명`;
+  const opts = `<option value="">팀 없음</option>` + S.teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('') + `<option value="new">+ 새 팀</option>`;
+  $('#players').innerHTML = ps.length ? `<table><tr><th>이름</th><th>팀</th><th>옮기기</th><th></th></tr>${ps.map(p => `<tr><td><span class="dot ${p.online ? 'on' : ''}"></span>${esc(p.name)}</td><td>${esc(p.team || '-')}</td>
+    <td><select onchange="move('${p.token}',this.value)">${opts.replace(`>${esc(p.team)}</option>`, ` selected>${esc(p.team)}</option>`)}</select></td><td><button class="btn dark sm" onclick="kick('${p.token}','${esc(p.name)}')">내보내기</button></td></tr>`).join('')}</table>` : '<p style="color:var(--mute)">아직 들어온 학생이 없어요.</p>';
+}
+async function move(token, team) { const r = await call('t:move', { cls: cur, token, team }); if (!r.ok) toast(r.msg || '옮기지 못했어요.'); }
+async function kick(token, name) { if (confirm(name + ' 학생을 내보낼까요?')) await call('t:kick', { cls: cur, token }); }
+
+/* ---------- 탭 ---------- */
+$('#viewTabs').querySelectorAll('button').forEach(b => b.onclick = () => {
+  view = b.dataset.v; $('#viewTabs').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  $('#vLive').style.display = view === 'live' ? '' : 'none'; $('#vResults').style.display = view === 'results' ? '' : 'none'; $('#vBook').style.display = view === 'book' ? '' : 'none';
+  if (view === 'results') loadResults(); if (view === 'book') loadBook();
+});
+
+/* ---------- 결과 ---------- */
+let RES = [];
+async function loadResults() { const r = await call('t:results', {}); RES = r.results || []; renderResults(); }
+$('#rCls').onchange = renderResults;
+function renderResults() {
+  const f = $('#rCls').value;
+  const rows = RES.filter(r => !f || r.cls === f).slice().reverse();
+  $('#rTable').innerHTML = rows.length ? `<table><tr><th>날짜</th><th>반</th><th>팀</th><th>요원</th><th>사건</th><th>총점</th></tr>${rows.map(r => `<tr><td>${new Date(r.date).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td><td>${esc(r.clsName)}</td><td>${esc(r.team)}${r.done ? '' : ' <small style="color:var(--mute)">(중간 종료)</small>'}</td><td>${r.members.map(esc).join(', ')}</td>
+    <td>${r.cases.map(c => `<div>${esc(c.title)} <small style="color:var(--mute)">${c.units.join('·')}단원 · ${Math.floor(c.sec / 60)}분${c.sec % 60}초 · 오답 ${c.wrong} · 힌트 ${c.hints}</small> <b>${c.score}</b></div>`).join('')}</td><td style="color:var(--gold);font-weight:800">${r.total}</td></tr>`).join('')}</table>` : '<p style="color:var(--mute)">아직 기록이 없어요.</p>';
+}
+$('#rCsv').onclick = () => {
+  const f = $('#rCls').value;
+  const lines = [['날짜', '반', '팀', '요원', '사건 번호', '사건', '단원', '걸린 시간(초)', '오답 스캔', '힌트', '본부 지원', '사건 점수', '작전 총점']];
+  for (const r of RES.filter(r => !f || r.cls === f)) for (const c of r.cases) lines.push([new Date(r.date).toLocaleString('ko-KR'), r.clsName, r.team, r.members.join(' / '), c.no, c.title, c.units.join('·'), c.sec, c.wrong, c.hints, c.hq, c.score, r.total]);
+  const csv = '﻿' + lines.map(l => l.map(x => `"${String(x).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = `맨인블랙_결과_${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+};
+$('#rClear').onclick = async () => { const f = $('#rCls').value; if (!confirm((f ? CLASSES.find(c => c.id === f).name : '모든 반') + ' 기록을 지울까요?')) return; await call('t:clearResults', { cls: f }); loadResults(); };
+
+/* ---------- 시나리오 북 ---------- */
+const DOCK = { photo: '사진·인상착의', id: '신원 카드', record: '측정 기록', schedule: '일정표', receipt: '영수증', note: '메모', interview: '인터뷰(질문해야 보임)' };
+async function loadBook() {
+  if ($('#vBook')._done) return;
+  const r = await call('t:book', {});
+  if (!r.ok) return;
+  $('#vBook')._done = true;
+  const al = Object.entries(r.aliens).map(([k, a]) => `<div>${ART.alien(k, 110)}<div style="font-family:'Black Han Sans';font-size:18px;color:var(--gold)">${esc(a.name)}</div><div>${esc(a.trait)}</div><div style="color:var(--mute);margin-top:4px">공개 연출: ${esc(a.gag)}</div></div>`).join('');
+  $('#vBook').innerHTML = `<div style="border-radius:16px;overflow:hidden;margin-bottom:14px;position:relative"><img src="img/bg-archive.jpg" style="width:100%;display:block;max-height:180px;object-fit:cover"><div style="position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,8,20,.45)"><span style="font-family:'Black Han Sans';font-size:26px;color:#ffd77a">📖 외계인 사건 기록 보관실 · 시나리오 북</span></div></div><div class="panel"><h3>이렇게 만들어져요</h3>
+    <p style="line-height:1.7;margin:0">사건마다 <b>장소 시나리오</b> 1개, <b>외계인 6종 중 1종</b>, <b>후보 4~5명</b>(팀 인원+1)이 무작위로 정해져요. 단서는 팀 인원 수만큼 만들어지고, 단서 하나는 후보 한 명을 지워요. 그래서 <b>모든 단서를 합쳐야만 정답이 하나</b>로 남아요(생성할 때마다 자동 검사). 후보의 이름·얼굴·옷·기록 값도 매번 바뀌어서 같은 시나리오를 다시 해도 답이 달라요.</p></div>
+    <div class="panel"><h3>👽 외계인 6종</h3><div class="aliens">${al}</div></div>
+    ${r.book.map(u => `<div class="panel"><h4>${u.u}단원 <span class="en">${esc(u.t)}</span> <span style="color:var(--mute);font-size:15px">· ${esc(u.ko)}</span></h4>
+      <div class="scen">${u.scenarios.map(s => `<div>${ART.ICON[s.icon] || '📍'} <b>${esc(s.title)}</b> · ${esc(s.place)}<br>후보: ${esc(s.role)}<br>이상 현상: ${esc(s.anomaly)}<br><span class="en">“${esc(s.line[0])}”</span></div>`).join('')}</div>
+      <table><tr><th>증거 항목</th><th>보이는 곳</th><th>질문</th><th>단서 예시</th><th>값</th></tr>${u.dims.map(d => `<tr><td>${esc(d.label)}</td><td>${DOCK[d.doc]}</td><td class="en">${esc(d.q)}</td><td class="en">${esc(d.sample)}</td><td>${d.values}${typeof d.values === 'number' ? '가지' : ''}</td></tr>`).join('')}</table></div>`).join('')}
+    <div class="panel"><h4>최종 · 번역기 회수 작전 (고른 단원 종합)</h4><div class="scen">${r.finals.map(s => `<div>${ART.ICON[s.icon] || '📍'} <b>${esc(s.title)}</b><br>${esc(s.place)} · ${esc(s.anomaly)}<br><span class="en">“${esc(s.line[0])}”</span></div>`).join('')}</div>
+    <p style="color:var(--mute)">번역기 부품: ${r.parts.map(esc).join(' · ')}</p></div>`;
+}
+</script>
+</body>
+</html>
