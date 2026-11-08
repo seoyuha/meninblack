@@ -26,7 +26,7 @@ const server = http.createServer(app);
 const io = new Server(server, { pingInterval: 10000, pingTimeout: 20000 });
 
 /* ---------------- 반 / 설정 ---------------- */
-const DEFAULT_SET = { units: [12], mode: 'unit', cases: 3, teamSize: 3, final: true, bots: true };
+const DEFAULT_SET = { units: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], mode: 'unit', cases: 3, teamSize: 3, final: true, bots: true };
 const CLASS_LIST = [['8', '8반', '0608'], ['9', '9반', '0609'], ['10', '10반', '0610']];
 let saved = {};
 try { saved = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8')); } catch (e) { /* 처음 */ }
@@ -534,6 +534,14 @@ io.on('connection', sock => {
     if (c.status === 'running') return ack({ ok: false, msg: '작전을 먼저 끝내 주세요.' });
     for (const p of Object.values(c.players)) { if (p.sid) io.to(p.sid).emit('kicked', '선생님이 대기실을 비웠어요. 다시 입장해 주세요.'); delete TOKENS[p.token]; }
     c.players = {}; c.teams = []; pushCls(c); ack({ ok: true });
+  });
+  T('t:notice', (d, c, ack) => {
+    if (!c) return ack({ ok: false });
+    const text = String((d && d.text) || '').trim().slice(0, 200);
+    if (!text) return ack({ ok: false, msg: '알림 내용을 써 주세요.' });
+    let n = 0;
+    for (const p of Object.values(c.players)) if (p.sid) { io.to(p.sid).emit('notice', { text }); n++; }
+    ack({ ok: true, n });
   });
   sock.on('t:results', (d, ack = () => {}) => { if (!sock.data.teacher) return ack({ ok: false }); ack({ ok: true, results: RESULTS }); });
   sock.on('t:clearResults', (d, ack = () => {}) => { if (!sock.data.teacher) return ack({ ok: false }); RESULTS = d && d.cls ? RESULTS.filter(r => r.cls !== d.cls) : []; saveResults(); ack({ ok: true }); });
