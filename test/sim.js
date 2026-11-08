@@ -52,7 +52,9 @@ function keyFrom(blank, full) {
         for (const c of v.clues) if (c.status === 'pending' && c.opts) {
           const right = c.opts.find(o => c.text.replace('_____', o) === c.full) || c.opts[0];
           const wrong = c.opts.find(o => o !== right);
-          const w = await emit(s, 's:decode', { i: c.i, choice: wrong }); ok(!w.ok, 'wrong decode rejected');
+          const w = await emit(s, 's:decode', { i: c.i, choice: wrong });
+          // 사건이 그 사이 넘어갔으면(낡은 상태) 단언 건너뜀
+          ok(!w.ok || !s.st || s.st.no !== v.no || s.st.phase !== 'inv', 'wrong decode rejected');
           const r = await emit(s, 's:decode', { i: c.i, choice: right }); ok(r.ok || true, '');
         }
         // 질문하기

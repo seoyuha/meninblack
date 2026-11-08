@@ -199,6 +199,8 @@ function answerOk(input, key) {
 }
 
 function act(p, type, d, ack) {
+  const cc = CLASSES[p.cls];
+  if (cc && cc.paused) return ack({ ok: false, msg: '선생님이 잠깐 멈췄어요. 곧 다시 시작해요!' });
   const t = teamOf(p); if (!t || !t.m || !t.m.cs) return ack({ ok: false, msg: '아직 작전이 시작되지 않았어요.' });
   const cs = t.m.cs, me = memberIdx(t, p);
   if (me < 0) return ack({ ok: false });
@@ -296,6 +298,7 @@ function checkReport(t) {
 /* ---------------- 봇·시간 처리 ---------------- */
 setInterval(() => {
   for (const c of Object.values(CLASSES)) for (const t of c.teams) {
+    if (c.paused) continue;
     if (!t.m || !t.m.cs || t.m.done) continue;
     const cs = t.m.cs; let changed = false;
     const humansOn = t.members.filter(mm => !mm.bot && isOnline(mm)).length;
@@ -339,7 +342,7 @@ setInterval(() => {
 /* ---------------- 학생에게 보내는 화면 정보 ---------------- */
 function viewFor(t, me) {
   const m = t.m;
-  const base = { team: t.name, cls: CLASSES[t.cls].name, practice: t.cls === 'P', me,
+  const base = { team: t.name, cls: CLASSES[t.cls].name, practice: t.cls === 'P', me, paused: !!CLASSES[t.cls].paused,
     members: t.members.map((mm, i) => ({ name: mm.name, bot: mm.bot, online: isOnline(mm), me: i === me })) };
   if (!m) return { ...base, phase: 'wait' };
   const cs = m.cs;
@@ -405,7 +408,7 @@ function teacherTeam(t) {
     elapsed: cs && cs.tInv ? Math.round((now() - cs.tInv) / 1000) : 0, results: m ? m.results : [] };
 }
 function teacherView(c) {
-  return { id: c.id, name: c.name, code: c.code, status: c.status, settings: c.settings,
+  return { id: c.id, name: c.name, code: c.code, status: c.status, paused: !!c.paused, settings: c.settings,
     players: Object.values(c.players).map(p => ({ token: p.token, name: p.name, online: p.online, team: (teamOf(p) || {}).name || '' })),
     teams: c.teams.map(teacherTeam) };
 }
@@ -424,7 +427,7 @@ function flush() {
 }
 function sendLobby(p) {
   const c = CLASSES[p.cls];
-  if (p.sid) io.to(p.sid).emit('state', { phase: 'wait', cls: c.name, name: p.name, status: c.status, units: c.settings.units, practice: p.cls === 'P' });
+  if (p.sid) io.to(p.sid).emit('state', { phase: 'wait', cls: c.name, name: p.name, status: c.status, units: c.settings.units, practice: p.cls === 'P', paused: !!c.paused });
 }
 function ttsTeam(t, text, except, delay) {
   t.members.forEach((mm, i) => { if (i === except) return; const p = mm.token && TOKENS[mm.token]; if (p && p.sid) io.to(p.sid).emit('tts', { text, delay: delay || 0 }); });
@@ -498,15 +501,34 @@ io.on('connection', sock => {
     if (!c.teams.length) autoAssign(c);
     for (const p of Object.values(c.players)) if (p.online && !p.teamId) placeLate(c, p);
     if (!c.teams.length) return ack({ ok: false, msg: '들어온 학생이 없어요.' });
-    c.status = 'running'; c.missionNo++;
+    c.status = 'running'; c.paused = 0; c.missionNo++;
     for (const t of c.teams) { if (c.settings.bots) fillBots(t, 3); startMission(t); }
     pushCls(c); ack({ ok: true });
   });
   T('t:end', (d, c, ack) => {
     if (!c) return ack({ ok: false });
     for (const t of c.teams) { if (t.m) { saveMission(t, !t.m.done); t.m = null; } }
-    c.status = 'lobby'; pushCls(c);
+    c.status = 'lobby'; c.paused = 0; pushCls(c);
     for (const p of Object.values(c.players)) if (p.sid) io.to(p.sid).emit('ended');
+    ack({ ok: true });
+  });
+  T('t:pause', (d, c, ack) => {
+    if (!c) return ack({ ok: false });
+    if (c.status !== 'running') return ack({ ok: false, msg: '진행 중일 때만 멈출 수 있어요.' });
+    if (c.paused) return ack({ ok: false, msg: '이미 멈춰 있어요.' });
+    c.paused = now();
+    pushCls(c); for (const p of Object.values(c.players)) if (!p.teamId) sendLobby(p);
+    ack({ ok: true });
+  });
+  T('t:resume', (d, c, ack) => {
+    if (!c) return ack({ ok: false });
+    if (!c.paused) return ack({ ok: false, msg: '멈춰 있지 않아요.' });
+    const dur = now() - c.paused; c.paused = 0;
+    for (const t of c.teams) {
+      const cs = t.m && t.m.cs;
+      if (cs) { if (cs.t0) cs.t0 += dur; if (cs.tInv) cs.tInv += dur; if (cs.vote) cs.vote.t0 += dur; }
+    }
+    pushCls(c); for (const p of Object.values(c.players)) if (!p.teamId) sendLobby(p);
     ack({ ok: true });
   });
   T('t:move', (d, c, ack) => { // 학생을 다른 팀으로

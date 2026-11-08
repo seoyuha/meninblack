@@ -247,6 +247,10 @@ input:focus{border-color:var(--glow)}
 #hqNotice .nttl{font-family:'Black Han Sans';font-size:21px;color:#ffc83d;margin-bottom:8px;text-shadow:0 2px 6px #000}
 #hqNotice .ntxt{font-size:17px;line-height:1.7;margin-bottom:14px;word-break:keep-all}
 #hqNotice .nok{border:0;border-radius:12px;padding:11px 26px;font-weight:800;font-size:16px;color:#061024;background:linear-gradient(180deg,#ffe07a,#ffb21c);box-shadow:0 3px 0 #b5700b;cursor:pointer;font-family:inherit}
+#pauseOv{position:fixed;inset:0;z-index:94;background:rgba(2,6,16,.84);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;animation:nIn .25s}
+#pauseOv .pic{font-size:74px;filter:drop-shadow(0 0 18px rgba(56,225,255,.6))}
+#pauseOv .pt1{font-family:'Black Han Sans';font-size:31px;color:#ffc83d;text-shadow:0 2px 8px #000;margin-top:8px}
+#pauseOv .pt2{font-size:17px;color:#bfe3ff;margin-top:8px}
 
 img.alienimg{image-rendering:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
 .cand{background:url('img/card-d.png') center/100% 100% no-repeat;border:2px solid transparent;padding:16px 10px 18px}
@@ -452,6 +456,16 @@ sock.on('connect', async () => {
 sock.on('kicked', m => { LS.del('mib_token'); show('sJoin'); toast(m, 4000); V = null; });
 sock.on('ended', () => toast('선생님이 작전을 끝냈어요. 수고했어요, 요원!', 4000));
 sock.on('tts', d => setTimeout(() => speak(d.text), d.delay || 0));
+function pauseOv(on, was) {
+  let el = document.getElementById('pauseOv');
+  if (on && !el) {
+    el = document.createElement('div'); el.id = 'pauseOv';
+    el.innerHTML = '<div style="text-align:center"><div class="pic">⏸️</div><div class="pt1">작전 일시 정지</div><div class="pt2">선생님을 봐 주세요!</div></div>';
+    document.body.appendChild(el);
+    if (!was) { beep(440, .15); setTimeout(() => beep(330, .25), 160); }
+  }
+  if (!on && el) { el.remove(); if (was) { beep(660, .12); setTimeout(() => beep(880, .18), 140); } }
+}
 sock.on('notice', d => {
   const old = document.getElementById('hqNotice'); if (old) old.remove();
   const el = document.createElement('div'); el.id = 'hqNotice';
@@ -465,6 +479,7 @@ sock.on('notice', d => {
 /* ---------- 상태 ---------- */
 sock.on('state', v => {
   const first = !V; const prev = V; V = v;
+  pauseOv(!!v.paused, !!(prev && prev.paused));
   if (first && v.scan) lastScan = v.scan.seq;
   if (first && v.reveal) revealSpoken = v.no;
   if (prev && prev.phase === 'brief' && v.phase === 'inv' && prev.no === v.no) playCountdown();
@@ -478,7 +493,7 @@ function playCountdown() {
   const step = () => { if (i >= seq.length) { ov.remove(); return; } beep(i === 3 ? 980 : 620, .12, 'triangle', .07); ov.innerHTML = `<img src="img/${seq[i]}.png">`; i++; setTimeout(step, 620); };
   step();
 }
-setInterval(() => { if (V && V.phase === 'inv') { V.elapsed += 1000; $('#tTimer').textContent = mmss(V.elapsed); if (V.vote) renderVote(); } }, 1000);
+setInterval(() => { if (V && V.phase === 'inv' && !V.paused) { V.elapsed += 1000; $('#tTimer').textContent = mmss(V.elapsed); if (V.vote) renderVote(); } }, 1000);
 const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
 
 function render() {

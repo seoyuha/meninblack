@@ -180,6 +180,8 @@ th{color:var(--glow)}
               <div class="row" style="margin-top:14px;gap:8px">
                 <button class="ib big" id="bAssign"><img src="img/t-big-assign.png" alt="자동 배정"></button>
                 <button class="ib big" id="bStart"><img src="img/t-big-start.png" alt="수업 시작"></button>
+                <button class="ib big hidden" id="bPause"><img src="img/t-big-pause.png" alt="일시 정지"></button>
+                <button class="ib big hidden" id="bResume"><img src="img/t-big-resume.png" alt="다시 시작"></button>
                 <button class="ib big" id="bEnd"><img src="img/t-big-end.png" alt="수업 종료"></button>
               </div>
               <p style="color:var(--mute);font-size:13px;margin:10px 0 0">자동 배정 없이 바로 '수업 시작'을 눌러도 자동으로 팀을 나눠요. 작전 중에 들어온 학생은 AI 요원 자리나 빈자리에 자동으로 들어가요.</p>
@@ -193,7 +195,7 @@ th{color:var(--glow)}
         </div>
 
         <div id="vLive" class="hidden">
-          <div class="panel"><h3>🕶️ 팀 현황 <span style="flex:1"></span><button class="ib sm2" id="bNotice"><img src="img/t-btn-noticebtn.png" alt="전체 알림"></button></h3><div id="teams" class="teams"></div></div>
+          <div class="panel"><h3>🕶️ 팀 현황 <span style="flex:1"></span><button class="ib sm2 hidden" id="bPause2"><img src="img/t-big-pause.png" alt="일시 정지"></button><button class="ib sm2 hidden" id="bResume2"><img src="img/t-big-resume.png" alt="다시 시작"></button><button class="ib sm2" id="bNotice"><img src="img/t-btn-noticebtn.png" alt="전체 알림"></button></h3><div id="teams" class="teams"></div></div>
         </div>
 
         <div id="vQuest" class="hidden book" ></div>
@@ -337,6 +339,10 @@ $('#bStart').onclick = async () => {
   const r = await call('t:start', { cls: cur }); toast(r.ok ? '작전 시작!' : r.msg);
   if (r.ok) { view = 'live'; renderMenu(); }
 };
+async function doPause() { const r = await call('t:pause', { cls: cur }); toast(r.ok ? '⏸ 잠깐 멈췄어요. 학생 화면도 함께 멈춰요.' : r.msg); }
+async function doResume() { const r = await call('t:resume', { cls: cur }); toast(r.ok ? '▶ 다시 시작! 시간은 멈춘 만큼 빼고 재요.' : r.msg); }
+$('#bPause').onclick = doPause; $('#bPause2').onclick = doPause;
+$('#bResume').onclick = doResume; $('#bResume2').onclick = doResume;
 $('#bEnd').onclick = async () => {
   const ok = await popup('end', '', '');
   if (!ok) return;
@@ -376,7 +382,13 @@ function badgeOf(t) {
 }
 function renderLive() {
   if (!S) return;
-  $('#status').innerHTML = S.status === 'running' ? '<span style="color:var(--green)">● 작전 진행 중</span>' : '<span style="color:var(--mute)">● 대기 중</span>';
+  $('#status').innerHTML = S.status === 'running'
+    ? (S.paused ? '<span style="color:var(--gold)">⏸ 일시 정지 중 — 학생 화면이 멈춰 있어요</span>' : '<span style="color:var(--green)">● 작전 진행 중</span>')
+    : '<span style="color:var(--mute)">● 대기 중</span>';
+  $('#bStart').classList.toggle('hidden', S.status === 'running');
+  const canP = S.status === 'running' && !S.paused, canR = S.status === 'running' && !!S.paused;
+  $('#bPause').classList.toggle('hidden', !canP); $('#bPause2').classList.toggle('hidden', !canP);
+  $('#bResume').classList.toggle('hidden', !canR); $('#bResume2').classList.toggle('hidden', !canR);
   updTV();
   $('#teams').innerHTML = S.teams.length ? S.teams.map(t => {
     const pct = t.total ? Math.round(((t.no - (t.done ? 0 : 1)) + (t.done ? 0 : t.decoded / Math.max(1, t.clues) * .7)) / t.total * 100) : 0;
